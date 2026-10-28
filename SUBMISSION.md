@@ -12,8 +12,8 @@
 | 在线体验入口 | https://tingjian-qm1uiydhbox.qoder.zone/demo/index.html?demo=1 |
 | 代码仓库（公开） | https://github.com/Inkkdot/tingjian |
 | 主分支 | `main` |
-| 代码与证据提交 | 本次整理提交 SHA：`<待推送后回填>`（含修复、回归测试与验证证据） |
-| 参赛仓库 | `SakuyaInazaki/powercontext-2026`，分支 `2026-competition-ecosystem`，项目目录 `qoder/tingjian/` |
+| 代码与证据提交 | 公开仓库 `main@7c5a9c1`（修复、回归测试与验证证据；本文件回填 SHA 的后续提交仅改文档） |
+| 参赛仓库 | `SakuyaInazaki/powercontext-2026`，分支 `2026-competition-ecosystem`，项目目录 `qoder/tingjian/`，同步提交 `691e5693` |
 | 指定技术 | seekdb v1.4.0.0（本项目选用 seekdb，未使用 PowerContext，也不宣称使用） |
 | Qoder 账号 UID | `01a17e94-5842-7b39-86cd-7549fcae9edf` |
 | 验证环境 | Windows 11 x64；Python 3.13.1；Node.js 24.14.0；Docker |
@@ -41,7 +41,9 @@
   脚本 `scripts/`、测试 `tests/`、真实执行产物 `artifacts/`。
 - 参赛仓库同步：`SakuyaInazaki/powercontext-2026` 的 `2026-competition-ecosystem` 分支，
   完整项目位于 `qoder/tingjian/`，含站点快照 `site/` 与验证证据，供评审在赛事仓库内直接查看。
-- 本次提交对应 `main` 上的提交：`<待推送后回填>`（推送后如仅回填本行 SHA，代码内容不变）。
+  本次同步提交：`691e569337810dc4fcdb4f6be676383b89627154`。
+- 本次提交对应 `main` 上的提交：`7c5a9c157a7ea05d1bb34df9572a5d623bd5912d`
+  （含修复、契约测试与证据；之后仅回填 SHA 的文档提交不改变代码）。
 - 仓库不包含任何真实 API Key、密码、Cookie、Token 或验证行；配置示例均为本地默认值或占位符。
 
 ## 3. 运行说明（题面第 3 项）
