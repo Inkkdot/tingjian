@@ -15,7 +15,7 @@
 
 - 仓库：https://github.com/Inkkdot/tingjian（公开）
 - 分支：`main`
-- 目录：仓库根目录；同内容同步保留于参赛私有仓库的 `qoder/tingjian/`
+- 目录：仓库根目录；同内容同步保留于参赛仓库的 `qoder/tingjian/`
 - 基线：基于 `oceanbase/powercontext` 的 `2026-competition-ecosystem` 分支
 - 可见性：公开仓库，未登录可直接访问
 
