@@ -4,12 +4,13 @@
 
 - 地址：https://tingjian-qm1uiydhbox.qoder.zone
 - 可见范围：公开（任何人都可访问，无需登录）
-- 体验入口：https://tingjian-qm1uiydhbox.qoder.zone/demo/?demo=1
+- 体验入口：https://tingjian-qm1uiydhbox.qoder.zone/demo/index.html?demo=1
 - 发布平台：Qoder Sites
-- 站点源码快照：`site/`（与线上发布内容一致）
+- 站点源码快照：公开仓库 `site/` 为早期自建语料快照（不含 B 站封面/字幕）；参赛仓库
+  `qoder/tingjian/site/` 与线上部署保持同步；演示素材版权归原视频作者及 Bilibili
 
 站点内容：项目简介、问题与场景、核心功能、真实界面截图、检索评测数据、运行步骤、
-代码仓库链接、Qoder 开发记录与离线体验入口。
+代码仓库链接、Qoder 开发记录与离线体验入口（含 B 站内嵌播放与字幕定位）。
 
 ## 代码仓库
 
@@ -31,12 +32,16 @@
 
 ## 验证样例
 
-查询「B+ 树的叶子节点怎么连接」，预期：
+Demo 搜索「操作系统」，预期：
 
-- 首条结果为「第 2 讲 索引与 B+ 树」
-- 片段区间 `00:43–01:24`
-- 打开字幕检查器可见该讲 40 条原始字幕
-- 结果理由标注全文与语义共同命中
+- 返回 10 条片段，首条为「操作系统简介」，区间 `00:01–00:45`
+- 右侧检查器内嵌 B 站官方播放器并按时间戳定位，展开可见该讲 578 句字幕
+- 拖拽检查器左侧分隔条可横向放大（380 → 680px），双击恢复默认
+
+导入样例（上传 3 句 SRT）：
+
+- Demo 模式：浏览器内解析、切句，得到 3 条字幕 / 1 个片段，加入临时索引后可检索；明确提示不写入 seekdb
+- Live 模式：同样流程得到 3 条字幕 / 1 个片段 / 1 个向量，四步状态全部通过并返回 `video_id`
 
 对应截图：`artifacts/screenshots/02-results.png`、`03-inspector.png`。
 
@@ -44,8 +49,8 @@
 
 | 要求 | 证据 | 状态 |
 | --- | --- | --- |
-| 网站未登录可访问 | 匿名请求 `/` 与 `/demo/?demo=1` 均返回 200；站点访问策略为 public | 通过 |
-| 按运行说明可启动并复现 | `README.md` + `scripts/verify.sh`；M0 PASS，单元 12、集成 2、评测与前端构建日志在 `artifacts/verify/` | 通过 |
+| 网站未登录可访问 | 匿名请求 `/` 与 `/demo/index.html?demo=1` 均返回 200；站点访问策略为 public | 通过 |
+| 按运行说明可启动并复现 | `README.md` + `scripts/verify.sh`；M0 PASS，单元 23、集成 2、评测与前端构建日志在 `artifacts/verify/` | 通过 |
 | Qoder 参与可核对 | `artifacts/qoder-development/01-qoder-session.png`、`DEVELOPMENT_LOG.md`、账号 UID | 通过 |
 | seekdb 实际发挥作用 | 真实 seekdb 1.4 容器；187 条字幕、23 个片段、23 个向量；M0、评测与查询轨迹可查 | 通过 |
 | 完整源码可审阅 | 公开仓库 [https://github.com/Inkkdot/tingjian](https://github.com/Inkkdot/tingjian)，匿名可访问 | 通过 |

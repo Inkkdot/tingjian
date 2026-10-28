@@ -1,4 +1,5 @@
 import type { Course, Cue, Fixture, Health, SearchHit, Video } from "./types";
+import { localCues, localLessons } from "./demoImport";
 
 let cache: Fixture | null = null;
 
@@ -11,19 +12,20 @@ export async function loadFixture(): Promise<Fixture> {
 }
 
 export function demoHealth(fixture: Fixture): Health {
-  const counts = fixture.counts ?? {};
+  const videos = demoVideos(fixture);
+  const courses = demoCourses(fixture);
   return {
     mode: "demo",
     store_ok: true,
     database: "静态导出样本（非 seekdb 连接）",
-    database_version: "live 导出快照",
+    database_version: "离线字幕快照",
     schema_version: "1",
     embedding_model: null,
     embedding_error: null,
-    course_count: counts.courses ?? fixture.courses.length,
-    video_count: counts.videos ?? fixture.videos.length,
-    cue_count: counts.cues ?? 0,
-    passage_count: counts.passages ?? 0,
+    course_count: courses.length,
+    video_count: videos.length,
+    cue_count: videos.reduce((sum, video) => sum + (video.cue_count ?? 0), 0),
+    passage_count: videos.reduce((sum, video) => sum + (video.passage_count ?? 0), 0),
     embedded_passage_count: 0,
     error: null,
     capabilities: {
@@ -41,11 +43,24 @@ export function demoHealth(fixture: Fixture): Health {
 }
 
 export function demoCourses(fixture: Fixture): Course[] {
-  return fixture.courses;
+  const videos = demoVideos(fixture);
+  const defs: Course[] = [...fixture.courses];
+  for (const lesson of localLessons()) {
+    if (!defs.some((course) => course.id === lesson.course.id)) defs.push(lesson.course);
+  }
+  return defs.map((course) => {
+    const own = videos.filter((video) => video.course_id === course.id);
+    return {
+      ...course,
+      video_count: own.length,
+      cue_count: own.reduce((sum, video) => sum + (video.cue_count ?? 0), 0),
+      passage_count: own.reduce((sum, video) => sum + (video.passage_count ?? 0), 0),
+    };
+  });
 }
 
 export function demoVideos(fixture: Fixture): Video[] {
-  return fixture.videos.map((video) => ({
+  return [...fixture.videos, ...localLessons().map((lesson) => lesson.video)].map((video) => ({
     ...video,
     cue_count: video.cue_count ?? video.cues?.length ?? 0,
     passage_count: video.passage_count ?? video.passages?.length ?? 0,
@@ -54,6 +69,8 @@ export function demoVideos(fixture: Fixture): Video[] {
 }
 
 export function demoCues(fixture: Fixture, videoId: string): Cue[] {
+  const local = localCues(videoId);
+  if (local) return local;
   return fixture.videos.find((video) => video.id === videoId)?.cues ?? [];
 }
 
@@ -79,9 +96,10 @@ export function demoSearch(
   if (!tokens.length) return [];
   const needed = Math.max(1, Math.ceil(tokens.length / 2));
   const scored: SearchHit[] = [];
-  for (const video of fixture.videos) {
+  const videos = demoVideos(fixture);
+  const courseNames = new Map(demoCourses(fixture).map((course) => [course.id, course.name]));
+  for (const video of videos) {
     if (courseId && video.course_id !== courseId) continue;
-    const course = fixture.courses.find((c) => c.id === video.course_id);
     for (const passage of video.passages ?? []) {
       const haystack = passage.text.toLowerCase();
       let matched = 0;
@@ -93,7 +111,7 @@ export function demoSearch(
         video_id: video.id,
         course_id: video.course_id,
         video_title: video.title,
-        course_name: course?.name ?? video.course_id,
+        course_name: courseNames.get(video.course_id) ?? video.course_id,
         start_ms: passage.start_ms,
         end_ms: passage.end_ms,
         cue_start_seq: passage.cue_start_seq,

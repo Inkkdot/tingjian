@@ -1,12 +1,14 @@
 import { useRef, useState } from "react";
-import { AlertTriangle, CheckCircle2, FileText, Link2, Loader2, UploadCloud } from "lucide-react";
+import { AlertTriangle, CheckCircle2, FileText, Link2, Loader2, Search, UploadCloud } from "lucide-react";
 import { api, errorText } from "../lib/api";
+import { addDemoLesson, parseSubtitleText } from "../lib/demoImport";
 import type { Course } from "../lib/types";
 
 interface ImportPageProps {
   demo: boolean;
   courses: Course[];
   onImported: () => Promise<void> | void;
+  onOpenSearch: () => void;
 }
 
 interface Preview {
@@ -54,8 +56,8 @@ function previewLines(text: string): string[] {
   return out;
 }
 
-export default function ImportPage({ demo, courses, onImported }: ImportPageProps) {
-  const [tab, setTab] = useState<"bilibili" | "srt">("bilibili");
+export default function ImportPage({ demo, courses, onImported, onOpenSearch }: ImportPageProps) {
+  const [tab, setTab] = useState<"bilibili" | "srt">(demo ? "srt" : "bilibili");
   const [url, setUrl] = useState("");
   const [courseId, setCourseId] = useState("");
   const [courseName, setCourseName] = useState("");
@@ -63,6 +65,7 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
   const [title, setTitle] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
   const [offset, setOffset] = useState("0");
+  const [part, setPart] = useState("1");
   const [force, setForce] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [lines, setLines] = useState<string[]>([]);
@@ -73,7 +76,7 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const disabled = demo || busy !== null;
+  const disabled = busy !== null;
 
   function resetFeedback() {
     setResult(null);
@@ -93,13 +96,14 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
   }
 
   async function doPreview() {
-    if (!url.trim()) return;
+    if (!url.trim() || demo) return;
     resetFeedback();
     setPreview(null);
     setBusy("preview");
     try {
       const data = await api.previewBilibili(url.trim());
       setPreview(data as Preview);
+      if (data.part_index) setPart(String(data.part_index));
     } catch (exc) {
       setError(errorText(exc));
     } finally {
@@ -108,7 +112,7 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
   }
 
   async function doImportBilibili() {
-    if (!url.trim()) return;
+    if (!url.trim() || demo) return;
     resetFeedback();
     setBusy("import");
     try {
@@ -117,6 +121,7 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
         course_id: courseId || null,
         course_name: courseId ? null : courseName || null,
         term,
+        part_index: Number(part) || 1,
         offset_ms: Number(offset) || 0,
       });
       setResult(data as ImportResult);
@@ -136,17 +141,46 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
     resetFeedback();
     setBusy("import");
     try {
-      const form = new FormData();
-      form.set("file", file);
-      if (courseId) form.set("course_id", courseId);
-      else if (courseName.trim()) form.set("course_name", courseName.trim());
-      form.set("term", term);
-      form.set("title", title);
-      form.set("source_url", sourceUrl);
-      form.set("offset_ms", String(Number(offset) || 0));
-      form.set("force", force ? "true" : "false");
-      const data = await api.importSrt(form);
-      setResult(data as ImportResult);
+      if (demo) {
+        const cues = parseSubtitleText(await file.text());
+        const wanted = courseName.trim() || "未分类课程";
+        const existing = courseId
+          ? courses.find((course) => course.id === courseId)
+          : courses.find((course) => course.name === wanted);
+        const summary = addDemoLesson({
+          courseId: existing?.id ?? `c-local-${Date.now().toString(36)}`,
+          courseName: existing?.name ?? wanted,
+          term,
+          title: title.trim() || file.name.replace(/\.[^.]+$/, ""),
+          sourceUrl: sourceUrl.trim(),
+          offsetMs: Number(offset) || 0,
+          cues,
+        });
+        setResult({
+          video_id: summary.video.id,
+          status: "demo-local",
+          cue_count: summary.cueCount,
+          passage_count: summary.passageCount,
+          embedded_count: 0,
+          source_hash: summary.sourceHash,
+          course_name: summary.course.name,
+          warnings: [
+            "Demo 模式：字幕只写入当前页面的浏览器内临时索引，不会写入 seekdb；刷新页面后清空。",
+          ],
+        });
+      } else {
+        const form = new FormData();
+        form.set("file", file);
+        if (courseId) form.set("course_id", courseId);
+        else if (courseName.trim()) form.set("course_name", courseName.trim());
+        form.set("term", term);
+        form.set("title", title);
+        form.set("source_url", sourceUrl);
+        form.set("offset_ms", String(Number(offset) || 0));
+        form.set("force", force ? "true" : "false");
+        const data = await api.importSrt(form);
+        setResult(data as ImportResult);
+      }
       await onImported();
     } catch (exc) {
       setError(errorText(exc));
@@ -155,19 +189,25 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
     }
   }
 
-  const steps = [
-    { label: "解析字幕", done: Boolean(result?.cue_count) },
-    { label: "按上下文切句", done: Boolean(result?.passage_count) },
-    { label: "生成向量", done: Boolean(result?.embedded_count), warn: Boolean(result && !result.embedded_count) },
-    { label: "写入 seekdb", done: Boolean(result?.video_id) },
-  ];
+  const steps = demo
+    ? [
+      { label: "解析字幕", done: Boolean(result?.cue_count) },
+      { label: "按上下文切句", done: Boolean(result?.passage_count) },
+      { label: "浏览器内索引", done: Boolean(result?.video_id) },
+    ]
+    : [
+      { label: "解析字幕", done: Boolean(result?.cue_count) },
+      { label: "按上下文切句", done: Boolean(result?.passage_count) },
+      { label: "生成向量", done: Boolean(result?.embedded_count), warn: Boolean(result && !result.embedded_count) },
+      { label: "写入 seekdb", done: Boolean(result?.video_id) },
+    ];
 
   return (
     <div>
       {demo && (
         <div className="notice">
-          <strong>Demo 模式为静态站点：</strong>导入需要在本机启动 FastAPI + seekdb（Live 模式）。
-          下方表单仅展示交互结构，不连接数据库。
+          <strong>Demo 模式为静态站点：</strong>SRT / VTT 导入在浏览器内完成解析与切句，
+          只写入当前页面的临时索引，不会写入 seekdb；B 站字幕轨导入需在本机 Live 模式运行。
         </div>
       )}
 
@@ -214,11 +254,26 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
             <input
               id="offset"
               type="number"
+              step={1}
               value={offset}
               onChange={(event) => setOffset(event.target.value)}
               disabled={disabled}
             />
           </div>
+          {tab === "bilibili" && (
+            <div className="field">
+              <label htmlFor="part">分 P</label>
+              <input
+                id="part"
+                type="number"
+                min={1}
+                step={1}
+                value={part}
+                onChange={(event) => setPart(event.target.value)}
+                disabled={disabled}
+              />
+            </div>
+          )}
         </div>
 
         {tab === "bilibili" ? (
@@ -234,20 +289,37 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
               />
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
-              <button className="btn" onClick={() => void doPreview()} disabled={disabled || !url.trim()}>
+              <button
+                className="btn"
+                onClick={() => void doPreview()}
+                disabled={disabled || demo || !url.trim()}
+                title={demo ? "静态演示站无法直连 B 站接口" : undefined}
+              >
                 {busy === "preview" ? <Loader2 className="spin" size={15} /> : <Link2 size={15} />}
                 读取元数据
               </button>
-              <button className="btn primary" onClick={() => void doImportBilibili()} disabled={disabled || !url.trim()}>
+              <button
+                className="btn primary"
+                onClick={() => void doImportBilibili()}
+                disabled={disabled || demo || !url.trim()}
+                title={demo ? "B 站字幕轨导入需在本地 Live 模式运行" : undefined}
+              >
                 {busy === "import" ? <Loader2 className="spin" size={15} /> : <UploadCloud size={15} />}
                 导入字幕轨
               </button>
             </div>
-            <div className="notice" style={{ marginTop: 12 }}>
-              未配置登录态时只读取匿名公开轨；在本机设置 BILIBILI_COOKIE 后可读取登录态字幕轨。
-              Cookie 仅由本机服务端读取并只发往 B 站，不写库、不返回前端。若仍失败，
-              请用「视频字幕提取器 Pro」导出 SRT 后上传。
-            </div>
+            {demo ? (
+              <div className="notice" style={{ marginTop: 12 }}>
+                静态演示站没有服务端代理与登录 Cookie，无法请求 B 站字幕接口。
+                可切换到「SRT / VTT 上传」体验从解析、切句到检索定位的完整流程；B 站链接导入在本机 Live 模式可用。
+              </div>
+            ) : (
+              <div className="notice" style={{ marginTop: 12 }}>
+                未配置登录态时只读取匿名公开轨；在本机设置 BILIBILI_COOKIE 后可读取登录态字幕轨。
+                Cookie 仅由本机服务端读取并只发往 B 站，不写库、不返回前端。若仍失败，
+                请用「视频字幕提取器 Pro」导出 SRT 后上传。
+              </div>
+            )}
             {preview && (
               <div className="card" style={{ marginTop: 12, background: "var(--vm-surface-2)" }}>
                 {preview.pic && (
@@ -345,7 +417,7 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
               <button className="btn primary" onClick={() => void doImportSrt()} disabled={disabled || !file}>
                 {busy === "import" ? <Loader2 className="spin" size={15} /> : <UploadCloud size={15} />}
-                导入并写入 seekdb
+                {demo ? "导入到浏览器演示索引" : "导入并写入 seekdb"}
               </button>
             </div>
           </div>
@@ -372,8 +444,18 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
             {result && (
               <div className="notice ok">
                 <CheckCircle2 size={14} style={{ marginRight: 4, verticalAlign: -2 }} />
-                导入完成：{result.cue_count} 条字幕、{result.passage_count} 个片段、{result.embedded_count} 个向量。
+                {demo
+                  ? `导入完成：${result.cue_count} 条字幕、${result.passage_count} 个片段，已加入当前页面的演示索引。`
+                  : `导入完成：${result.cue_count} 条字幕、${result.passage_count} 个片段、${result.embedded_count} 个向量。`}
                 <div className="small mono">video_id {result.video_id} · source_hash {result.source_hash?.slice(0, 16)}…</div>
+                {demo && (
+                  <div className="small" style={{ marginTop: 4 }}>
+                    未写入 seekdb，刷新页面后清空。
+                    <button className="btn ghost sm" style={{ marginLeft: 8 }} onClick={onOpenSearch}>
+                      <Search size={13} /> 去搜索页验证
+                    </button>
+                  </div>
+                )}
                 {result.warnings?.map((warning) => <div className="small" key={warning}>{warning}</div>)}
               </div>
             )}

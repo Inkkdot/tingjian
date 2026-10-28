@@ -21,7 +21,7 @@ const PAGE_TITLES: Record<PageKey, { title: string; sub: string }> = {
   },
   import: {
     title: "导入",
-    sub: "B 站链接或 SRT / VTT，写入真实 seekdb",
+    sub: "B 站链接或 SRT / VTT · 解析、切句与入库",
   },
   settings: {
     title: "设置",
@@ -194,7 +194,12 @@ export default function App() {
       )}
       {page === "review" && <ReviewPage demo={demo} />}
       {page === "import" && (
-        <ImportPage demo={demo} courses={courses} onImported={refresh} />
+        <ImportPage
+          demo={demo}
+          courses={courses}
+          onImported={refresh}
+          onOpenSearch={() => navigate("search")}
+        />
       )}
       {page === "settings" && (
         <SettingsPage

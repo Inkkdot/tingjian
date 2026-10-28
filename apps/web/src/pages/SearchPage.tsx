@@ -16,7 +16,10 @@ const MODE_LABEL: Record<SearchMode, string> = {
   semantic: "语义",
 };
 
-const EXAMPLES = ["B+ 树为什么适合范围查询", "事务隔离级别有哪些", "什么是虚拟内存", "进程和线程有什么区别"];
+const EXAMPLES = ["操作系统", "计算机网络", "内存", "database"];
+
+const INSPECTOR_MIN = 320;
+const INSPECTOR_MAX = 760;
 
 interface SearchPageProps {
   demo: boolean;
@@ -79,6 +82,11 @@ export default function SearchPage(props: SearchPageProps) {
   const [cueFocus, setCueFocus] = useState<number | null>(null);
   const [localUrl, setLocalUrl] = useState<string | null>(null);
   const [embedSeek, setEmbedSeek] = useState<{ videoId: string; ms: number } | null>(null);
+  const [inspectorW, setInspectorW] = useState(() => {
+    const saved = Number(window.localStorage.getItem("tj-inspector-w"));
+    return saved >= INSPECTOR_MIN && saved <= INSPECTOR_MAX ? saved : 380;
+  });
+  const [inspectorDrag, setInspectorDrag] = useState(false);
   const [playhead, setPlayhead] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -135,7 +143,7 @@ export default function SearchPage(props: SearchPageProps) {
     return () => {
       cancelled = true;
     };
-  }, [query, mode, courseId, demo, fixture]);
+  }, [query, mode, courseId, demo, fixture, videos]);
 
   useEffect(() => {
     if (!activeVideo) {
@@ -244,10 +252,38 @@ export default function SearchPage(props: SearchPageProps) {
     setLocalUrl(URL.createObjectURL(file));
   }
 
+  function startInspectorDrag(event: React.PointerEvent) {
+    event.preventDefault();
+    setInspectorDrag(true);
+    const startX = event.clientX;
+    const startW = inspectorW;
+    let latest = inspectorW;
+    const move = (ev: PointerEvent) => {
+      latest = Math.min(INSPECTOR_MAX, Math.max(INSPECTOR_MIN, startW - (ev.clientX - startX)));
+      setInspectorW(latest);
+    };
+    const up = () => {
+      setInspectorDrag(false);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.localStorage.setItem("tj-inspector-w", String(latest));
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  }
+
+  function resetInspectorWidth() {
+    setInspectorW(380);
+    window.localStorage.setItem("tj-inspector-w", "380");
+  }
+
   const intro = !query.trim();
 
   return (
-    <div className={`workspace${activeVideo ? "" : " no-inspector"}`}>
+    <div
+      className={`workspace${activeVideo ? " has-inspector" : " no-inspector"}`}
+      style={activeVideo ? ({ "--tj-inspector-w": `${inspectorW}px` } as React.CSSProperties) : undefined}
+    >
       <section className="panel main-panel">
         {intro ? (
           <div className="search-hero">
@@ -268,7 +304,7 @@ export default function SearchPage(props: SearchPageProps) {
                 autoFocus
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
-                placeholder="例如：为什么数据库索引使用 B+ 树而不是二叉树？"
+                placeholder="例如：操作系统为什么要管理硬件资源？"
                 aria-label="搜索课程字幕"
               />
               <button className="btn solid" type="submit">检索</button>
@@ -393,6 +429,18 @@ export default function SearchPage(props: SearchPageProps) {
           </>
         )}
       </section>
+
+      {activeVideo && (
+        <div
+          className={`ws-sash${inspectorDrag ? " dragging" : ""}`}
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="拖拽调整播放器与字幕宽度，双击恢复默认"
+          title="拖拽调整宽度 · 双击恢复默认"
+          onPointerDown={startInspectorDrag}
+          onDoubleClick={resetInspectorWidth}
+        />
+      )}
 
       {activeVideo && (
         <aside className="inspector" aria-label="播放与字幕">

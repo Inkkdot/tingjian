@@ -278,3 +278,36 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 
 > 说明：Qoder 账号 UID 取自本机 Qoder Sites 发布记录中的 `ownerUid`，与账号头像 URL
 > 中的用户 ID 一致，未做猜测。其余开发记录、命令输出与截图均为本次真实开发产生。
+
+## 阶段八 · 演示内容清理、浏览器内导入与检查器拖拽（2026-10-28）
+
+针对演示站的四项反馈做收口：删除落地页残留的占位 demo、推荐词改为真实课程内容、
+修复导入页无法输入/上传、让播放器与字幕检查器可横向拖拽放大。
+
+实现：
+
+- `pages/SearchPage.tsx`：推荐词改为 demo 语料中真实存在的「操作系统 / 计算机网络 / 内存 / database」；
+  检查器左侧新增 `ws-sash` 拖拽分隔条，宽度 320–760px、记忆到 `localStorage(tj-inspector-w)`，
+  双击恢复 380px；`<1200px` 回退单列并隐藏分隔条。搜索效果依赖加入 `videos`，导入后无需刷新即可检索新讲次。
+- `lib/demoImport.ts`（新增）：浏览器端解析 SRT/VTT（BOM、CRLF、可选小时位、HTML 标签清理），
+  复刻 live 端 20–45s / ≤260 字 / 1 cue overlap 切块；生成讲次与课程，B 站 URL 自动解析 BV/P 以便嵌入播放。
+- `lib/demo.ts`：课程、讲次、字幕、搜索与健康计数合并浏览器内临时索引；导入后课程/讲次/片段计数即时更新。
+- `pages/ImportPage.tsx`：移除 demo 模式下对表单的全局禁用；数值输入与文件选择在 demo 可用；
+  demo 的 SRT 导入走浏览器解析与临时索引，明确标注「不写入 seekdb、刷新后清空」；
+  B 站 tab 在 demo 下禁用直连并给出准确原因；新增分 P 输入并在预览后回填。
+- `components/AppShell.tsx`、`pages/SettingsPage.tsx`：把「Live 导出的 seekdb 快照」改为「离线字幕快照」，
+  明确 Demo 不连接 seekdb；评测语料（自建 5 讲标注集）与 Demo 快照分开标注。
+- 落地页 `dist/index.html`：删除 B+ 树/虚拟内存旧截图与 12 片段等占位数据；换成当前 B 站 demo 截图、
+  2 门课 / 4 讲 / 2,106 条字幕 / 229 片段；修复 `./demo/?demo=1` → `./demo/index.html?demo=1`；
+  评测表注明使用自建标注语料；补充演示素材版权说明。
+
+验证（headless Edge，1600×1000；窄屏 1024×900）：
+
+- `python -m pytest tests/unit`：23 通过；`tests/integration`：2 通过；`npm run build` 与 `build:demo` 通过。
+- Demo 搜索：点推荐词「操作系统」→ 10 条命中 → 点击首条 → 内嵌播放器定位 0:01，检查器 578 句字幕。
+- 拖拽：分隔条左拖 300px，检查器 380 → 680px，播放器与字幕同步变宽，localStorage 写入 680；1024 宽自动单列。
+- Demo 导入：B 站 tab 的偏移/分 P 输入可编辑；SRT 上传 3 句 → 3 条字幕 / 1 个片段，加入临时索引，
+  搜索「冒烟测试」命中新讲次；结果卡片明确「未写入 seekdb，刷新后清空」。
+- Live 导入：`localhost:5173` 连 `127.0.0.1:8001` 的真实 seekdb，上传同款 SRT →
+  3 条字幕 / 1 个片段 / 1 个向量，四步状态全部通过，返回 `video_id v-31e21c8505c07d`。
+- 截图见参赛仓库 `artifacts/screenshots/17-20`（含 B 站画面/封面，按素材 README 不进入公开仓库）。

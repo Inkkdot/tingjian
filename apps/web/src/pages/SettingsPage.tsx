@@ -106,7 +106,7 @@ export default function SettingsPage({ demo, health, fixture, theme, onThemeChan
         {health?.embedding_error && <div className="notice">{health.embedding_error}</div>}
         {demo && (
           <div className="notice">
-            当前为 Qoder Sites 静态 Demo：健康数据来自 Live 模式导出的快照，站点本身不连接 seekdb。
+            当前为 Qoder Sites 静态 Demo：健康数据来自离线字幕快照，站点本身不连接 seekdb。
           </div>
         )}
       </div>
@@ -121,7 +121,7 @@ export default function SettingsPage({ demo, health, fixture, theme, onThemeChan
               <tr><td>向量检索（bge-small-zh-v1.5）</td><td><span className="badge ok">Live 已验证 · 16/17</span></td></tr>
               <tr><td>混合检索（RRF k=60）</td><td><span className="badge ok">Live 已验证 · 17/17</span></td></tr>
               <tr><td>B 站公开字幕轨</td><td><span className="badge warn">本环境需登录，改用 SRT 兜底</span></td></tr>
-              <tr><td>SRT 导入 / 复习清单</td><td><span className="badge warn">Live 可用；Demo 静态站不写库</span></td></tr>
+              <tr><td>SRT 导入 / 复习清单</td><td><span className="badge warn">Live 写 seekdb；Demo 导入仅浏览器索引；复习需 Live</span></td></tr>
               <tr><td>ASR / LLM 摘要</td><td><span className="badge err">路线功能，未实现</span></td></tr>
             </tbody>
           </table>
@@ -151,12 +151,12 @@ export default function SettingsPage({ demo, health, fixture, theme, onThemeChan
       </div>
 
       <div className="card" style={{ marginTop: 14 }}>
-        <div className="section-title" style={{ marginTop: 0 }}>检索评测（Live 实测）</div>
+        <div className="section-title" style={{ marginTop: 0 }}>检索评测（Live 实测 · 自建标注语料）</div>
         {metricsError && <div className="notice">无法加载 metrics.json：{metricsError}</div>}
         {metrics && (
           <>
             <div className="small muted" style={{ marginBottom: 8 }}>
-              语料 {metrics.corpus.courses} 门课 / {metrics.corpus.videos} 讲 / {metrics.corpus.cues} 句 /
+              评测语料与上方 Demo 快照不同：{metrics.corpus.courses} 门课 / {metrics.corpus.videos} 讲 / {metrics.corpus.cues} 句 /
               {" "}{metrics.corpus.passages} 片段；{String(metrics.annotation.total_queries)} 条标注查询
               （无答案 {String(metrics.annotation.no_answer)} 条），容差 ±{Number(metrics.annotation.tolerance_ms) / 1000}s。
               判定规则：{String(metrics.annotation.hit_rule)}。
@@ -189,11 +189,11 @@ export default function SettingsPage({ demo, health, fixture, theme, onThemeChan
         <p className="small">
           「听见」把课程视频字幕切成可检索片段：B 站链接或 SRT/VTT 导入 → seekdb 落库 →
           全文 + 向量双路召回 → RRF 融合 → 带时间戳跳转；复习清单按时间预算选片。
-          Live 模式由 FastAPI + seekdb v1.4.0.0 提供，Demo 模式为真实导出快照。
+          Live 模式由 FastAPI + seekdb v1.4.0.0 提供，Demo 模式为离线字幕快照。
         </p>
         <ul className="small muted" style={{ margin: "6px 0 0 18px", padding: 0 }}>
           <li>B 站公开字幕轨在无登录环境不可用（实测 95 个榜单视频 + 6 个课程视频），产品引导用「视频字幕提取器 Pro」导出 SRT；服务端不接触 Cookie。</li>
-          <li>Demo 静态站点只做浏览器关键词过滤，不等于 seekdb 混合检索。</li>
+          <li>Demo 静态站点只做浏览器关键词过滤，SRT 导入仅写入浏览器临时索引，不等于 seekdb 混合检索。</li>
           <li>本地视频使用浏览器临时 URL，不上传、不托管，关闭页面后需重新选择。</li>
           <li>复习清单为相关度 + 覆盖贪心并合并区间，未实现 MMR，不宣称 MMR。</li>
           <li>无答案查询依赖语义阈值门禁，仍可能把弱相关片段判为有答案。</li>

@@ -352,8 +352,9 @@ export default function AppShell(props: AppShellProps) {
         <main className="tj-content tj-scroll">
           {mode === "demo" && (
             <div className="notice" style={{ marginTop: 0 }}>
-              <strong>Demo 模式：</strong>页面读取由 Live 模式真实 seekdb 导出的样例快照，
-              浏览器内只做关键词过滤，不代表 seekdb 全文 + 向量混合检索。导入与复习清单需在本地 Live 运行。
+              <strong>Demo 模式：</strong>页面读取离线字幕快照，浏览器内只做关键词过滤，
+              不代表 seekdb 全文 + 向量混合检索。
+              SRT 导入写入浏览器内临时索引；复习清单需在本地 Live 运行。
             </div>
           )}
           {children}
