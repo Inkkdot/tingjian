@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import {
-  BookOpen, FileText, ListChecks, Moon, Search, Settings, Sun, Upload, X,
+  BookOpen, ExternalLink, FileText, Github, ListChecks, Moon, Search, Settings, Sun, Upload, X,
   type LucideIcon,
 } from "lucide-react";
 import type { Course, Health, Video } from "../lib/types";
@@ -303,6 +303,18 @@ export default function AppShell(props: AppShellProps) {
               </div>
             </>
           )}
+          <a
+            className="tj-side-repo"
+            href="https://github.com/Inkkdot/tingjian"
+            target="_blank"
+            rel="noreferrer"
+            title="源码仓库 https://github.com/Inkkdot/tingjian"
+          >
+            <Github size={13} />
+            <span>源码仓库</span>
+            <span className="tj-side-repo-name">Inkkdot/tingjian</span>
+            <ExternalLink size={11} />
+          </a>
         </aside>
         <div
           className={`tj-sash${dragging ? " dragging" : ""}`}
