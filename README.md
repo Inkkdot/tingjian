@@ -4,7 +4,7 @@
 系统在 seekdb 中同时执行 **ik 全文检索** 与 **bge-small-zh 向量检索**，用 RRF 融合，
 返回带时间戳的字幕片段；点击结果即可从对应时间点播放，并可生成限时复习清单。
 
-> Qoder × OceanBase 参赛作品。核心检索与存储完全运行在 **seekdb v1.4.0.0** 上；
+> Qoder × OceanBase 项目。核心检索与存储完全运行在 **seekdb v1.4.0.0** 上；
 > 公开站点另附离线 Demo：仓库内 `apps/web/public/fixture.json` 由本机 seekdb 导出，
 > 线上演示使用 B 站公开字幕快照（素材不进入公开仓库），两者都只用于界面演示。
 >
@@ -69,7 +69,7 @@ scripts/             db_probe / verify_m0 / import_fixture / reindex / eval_run 
 tests/unit/          字幕解析、切块、检索逻辑、跳转 URL 单测
 tests/integration/   真实 seekdb 建表、幂等导入、真实向量与混合检索
 artifacts/           真实执行输出（探针、M0 报告、评测指标、验证日志）
-DEVELOPMENT_LOG.md   Qoder 开发记录（提交材料见 SUBMISSION.md）
+DEVELOPMENT_LOG.md   Qoder 开发记录（详见 SUBMISSION.md）
 ```
 
 ## 快速开始
@@ -206,7 +206,7 @@ M0 报告见 `artifacts/m0-report.json`，完整验证日志见 `artifacts/verif
 | 数据源 | 本机 seekdb | 仓库内 fixture 由 seekdb 导出；线上演示为 B 站字幕快照 |
 | 检索 | seekdb 全文 + 向量 + RRF | 浏览器内关键词过滤，仅作展示 |
 | 导入 | 可用 | 浏览器内解析并加入临时索引，不写库 |
-| 适合 | 本地复现、评审验证 | 公开站点无后端时体验界面 |
+| 适合 | 本地复现、验收验证 | 公开站点无后端时体验界面 |
 
 Demo 模式的所有结果页均有「离线样例」标识，不宣称语义检索能力。
 仓库内的自建语料演示由 `scripts/export_demo.py` 从本机 seekdb 导出
@@ -242,14 +242,14 @@ node scripts/build_demo_fixture.mjs --demo <演示素材目录> --out apps/web/d
 - Demo 模式不具备真实检索能力，只用于界面演示。
 - 尚无真实用户使用规模数据；公开站点访问统计可在上线后补充。
 
-## 提交材料索引
+## 材料索引
 
 | 材料 | 位置 |
 | --- | --- |
 | 代码仓库 | [https://github.com/Inkkdot/tingjian](https://github.com/Inkkdot/tingjian)（公开） |
 | 运行说明 | 本 README |
 | 验证样例 | 上文「验证样例」+ `artifacts/sample-check.json` |
-| Qoder 开发记录 / UID | `DEVELOPMENT_LOG.md`；UID `01a17e94-5842-7b39-86cd-7549fcae9edf` |
+| Qoder 开发记录 | `DEVELOPMENT_LOG.md` |
 | 真实执行证据 | `artifacts/`、`artifacts/verify/` |
 | 第三方来源 | `THIRD_PARTY_NOTICES.md` |
 

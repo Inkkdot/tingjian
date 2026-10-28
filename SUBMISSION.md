@@ -1,6 +1,6 @@
-# 提交材料 · 听见（Tingjian）
+# 项目材料 · 听见（Tingjian）
 
-> 最后更新：2026-10-28。站点在评审结束前保持在线，不暂停、不删除。
+> 最后更新：2026-10-28。站点将持续保持在线，不暂停、不删除。
 > 本材料所有数据均来自本机真实运行；失败样本原样保留，未调参掩盖。
 
 ## 0. 关键信息
@@ -12,17 +12,15 @@
 | 在线体验入口 | https://tingjian-qm1uiydhbox.qoder.zone/demo/index.html?demo=1 |
 | 代码仓库（公开） | https://github.com/Inkkdot/tingjian |
 | 主分支 | `main` |
-| 代码与证据提交 | 公开仓库 `main@7c5a9c1`（修复、回归测试与验证证据；本文件回填 SHA 的后续提交仅改文档） |
-| 参赛仓库 | `SakuyaInazaki/powercontext-2026`，分支 `2026-competition-ecosystem`，项目目录 `qoder/tingjian/`，同步提交 `691e5693` |
-| 指定技术 | seekdb v1.4.0.0（本项目选用 seekdb，未使用 PowerContext，也不宣称使用） |
-| Qoder 账号 UID | `01a17e94-5842-7b39-86cd-7549fcae9edf` |
+| 代码与证据 | 公开仓库 `main@7c5a9c1`（修复、回归测试与验证证据；本文件回填 SHA 的后续提交仅改文档） |
+| 数据库 | seekdb v1.4.0.0（全文 + 向量双索引、余弦距离与 RRF 融合） |
 | 验证环境 | Windows 11 x64；Python 3.13.1；Node.js 24.14.0；Docker |
 | 全量验证 | `bash scripts/verify.sh`：M0、单测 24、集成 2、评测、前端构建全部通过 |
 
-## 1. 项目网站（题面第 1 项）
+## 1. 项目网站
 
 - 地址：<https://tingjian-qm1uiydhbox.qoder.zone>，托管于 Qoder Sites，**公开访问，无需登录**。
-- 站点包含题面要求的全部内容：
+- 站点包含以下内容：
   - 项目简介与问题场景（首页 Hero、「它解决什么」）；
   - 核心功能：字幕落库与溯源、全文 + 向量混合检索与拒答、预算内复习清单；
   - 真实界面截图：检索结果、B 站内嵌播放器 + 字幕检查器、复习清单、设置页、SRT 导入；
@@ -32,25 +30,20 @@
 - 在线 Demo：<https://tingjian-qm1uiydhbox.qoder.zone/demo/index.html?demo=1>
   - 数据为 B 站公开课程字幕快照（4 讲 / 2,106 条字幕 / 229 个片段），封面与字幕不进入公开仓库；
   - Demo 在浏览器内完成关键词过滤与时间戳定位，页面明确标注「离线样例」，不冒充 seekdb 混合检索。
-- 站点为 Qoder Sites 不可变快照；本次更新后重新发布，评审期内保持在线。
+- 站点为 Qoder Sites 不可变快照；本次更新后重新发布，发布后保持在线。
 
-## 2. 代码仓库（题面第 2 项）
+## 2. 代码仓库
 
 - 公开仓库：<https://github.com/Inkkdot/tingjian>，分支 `main`，未登录可直接访问。
 - 仓库根目录即完整工程：后端 `apps/api/`、前端 `apps/web/`、样例字幕 `fixtures/authored/`、
   脚本 `scripts/`、测试 `tests/`、真实执行产物 `artifacts/`。
-- 参赛仓库同步：`SakuyaInazaki/powercontext-2026` 的 `2026-competition-ecosystem` 分支，
-  完整项目位于 `qoder/tingjian/`，含站点快照 `site/` 与验证证据，供评审在赛事仓库内直接查看。
-  本次同步提交：`691e569337810dc4fcdb4f6be676383b89627154`。
 - 本次提交对应 `main` 上的提交：`7c5a9c157a7ea05d1bb34df9572a5d623bd5912d`
   （含修复、契约测试与证据；之后仅回填 SHA 的文档提交不改变代码）。
-- 补充材料说明提交：公开仓库 `0da4c3f`；Qoder 完整会话归档提交：参赛仓库 `1c19accc`
-  （会话文件只随参赛仓库分发，见第 5 节）。
-- 公开仓库内 `site/` 是早期自建语料（5 讲）的站点快照，`site/demo` 亦为自建语料，均不含 B 站素材；
-  线上站点与参赛仓库 `qoder/tingjian/site/` 同步，使用 B 站字幕快照。
+- 仓库内 `site/` 是早期自建语料（5 讲）的站点快照，`site/demo` 亦为自建语料，均不含 B 站素材；
+  线上站点使用 B 站字幕快照。
 - 仓库不包含任何真实 API Key、密码、Cookie、Token 或验证行；配置示例均为本地默认值或占位符。
 
-## 3. 运行说明（题面第 3 项）
+## 3. 运行说明
 
 ### 3.1 环境
 
@@ -165,7 +158,7 @@ bash scripts/verify.sh
   Cookie 不写库、不返回前端、不进日志；未配置时使用匿名公开轨或 SRT 上传回退。
 - 所有示例配置均使用 `<your-...>` 占位符。
 
-## 4. 可执行验证样例（题面第 4 项，指定技术：seekdb）
+## 4. 可执行验证样例（seekdb）
 
 ### 4.1 初始数据
 
@@ -246,25 +239,20 @@ bash scripts/verify.sh
 Live 导入：`scripts/verify_m0.py` 通过 `POST /api/import/srt` 上传真实 SRT，
 得到 43 条字幕 / 6 个片段 / 6 个向量并写回 seekdb（见上表）。
 
-## 5. Qoder 开发记录（题面第 5 项）
+## 5. Qoder 开发记录
 
 | 材料 | 位置 |
 | --- | --- |
-| Qoder 完整开发会话 | 参赛仓库 `qoder/tingjian/artifacts/qoder-development/conversation-2026-10-28.md`（Qoder 桌面端会话全量导出，脱敏后 5.8 MB） |
+| Qoder 完整开发会话 | 内部归档 `conversation-2026-10-28.md`（Qoder 桌面端会话全量导出，脱敏后 5.8 MB，不随公开仓库分发） |
 | Qoder 开发会话截图 | `artifacts/qoder-development/01-qoder-session.png`（Qoder 桌面端任务、工具调用与执行状态） |
 | 开发记录 | `DEVELOPMENT_LOG.md`：需求拆解、阶段实现、真实命令输出、缺陷与修复 |
 | 全量验收日志 | `artifacts/verify/`：db_probe、verify_m0、unit、integration、eval、web_build |
 | 评测明细 | `artifacts/metrics.json`（含失败样本） |
-| 账号 UID | `01a17e94-5842-7b39-86cd-7549fcae9edf` |
 
-完整会话导出含赛事内部讨论与工作区路径，只随参赛仓库提供，不进入公开仓库；
+完整会话导出含内部讨论与工作区路径，不进入公开仓库；
 公开仓库以会话截图与 `DEVELOPMENT_LOG.md` 作为可核对依据。
 
-UID 取自本机 Qoder Sites 发布记录的 `ownerUid`（10 份发布记录取值一致），
-并与账号头像 URL `https://qoder.com.cn/users/01a17e94-5842-7b39-86cd-7549fcae9edf/default/avatars`
-中的用户 ID 相同；仅用于赛事身份核验，不含任何凭据。
-
-## 6. 使用效果材料（题面可选项）
+## 6. 使用效果材料
 
 - 检索效果（可复核）：`artifacts/metrics.json` 的 Hit@3 与拒答率，见 4.4；混合模式 17/17，拒答 3/3。
 - 站点访问（Qoder Sites 后台，2026-10-28 查询）：近 24 小时 PV 47、估算 UV 8。
@@ -273,31 +261,16 @@ UID 取自本机 Qoder Sites 发布记录的 `ownerUid`（10 份发布记录取�
 
 ## 7. 合规与第三方材料
 
-- 仓库与站点不含真实 API Key、密码、Cookie、Token 或平台验证行；配置示例使用占位符。
+- 仓库与站点不含真实 API Key、密码、Cookie、Token 或验证行；配置示例使用占位符。
 - B 站封面与字幕仅用于功能演示，不进入公开仓库；公开 Demo 由浏览器加载 B 站官方播放器。
 - 第三方依赖与数据来源、许可证见 `THIRD_PARTY_NOTICES.md`：
   fastembed、bge-small-zh-v1.5、jieba、FastAPI、React、Vite、Tailwind 等；
   自撰字幕以 CC BY 4.0 提供；FlowOSS 仅作设计参考。
-- 本项目使用 seekdb 作为指定技术，未使用 PowerContext；不把 Postgres、SQLite 或浏览器过滤
+- 本项目使用 seekdb 作为检索与存储引擎；不把 Postgres、SQLite 或浏览器过滤
   标成 seekdb 能力。
-- 站点在评审结束前保持在线。
+- 站点持续保持在线。
 
-## 8. 验收对照（题面 3.1 / 3.2 与提交材料）
-
-| 题面要求 | 对应材料 | 状态 |
-| --- | --- | --- |
-| 网站可公开访问、无需登录 | 站点首页与 Demo 链接；Qoder Sites access policy = public | 通过 |
-| 网站含简介、问题、功能、Demo 截图、仓库链接、体验入口 | 首页各分区与在线 Demo | 通过 |
-| 代码仓库公开或评审可访问 | `Inkkdot/tingjian`（public）；参赛仓库 `qoder/tingjian/` | 通过 |
-| 完整运行说明：环境、依赖、seekdb 部署与接入 | 第 3 节 + `README.md` | 通过 |
-| 可执行验证样例：初始数据、输入、步骤、预期、证据 | 第 4 节 + `artifacts/verification-search.json`、`db-probe.json`、`m0-report.json` | 通过 |
-| 证明指定技术真实生效 | seekdb 版本、ik 全文、HNSW 向量、双索引、真实查询分数与候选数 | 通过 |
-| Qoder 为主要开发工具且可核对 | Qoder 完整会话导出、会话截图、`DEVELOPMENT_LOG.md`、UID | 通过 |
-| 使用效果材料（可选） | 检索评测 + 站点访问统计（含覆盖说明） | 提交 |
-| 配置占位符、无敏感凭据、第三方署名 | 第 7 节 + `THIRD_PARTY_NOTICES.md` | 通过 |
-| 评审结束前不暂停/删除站点 | 站点持续在线 | 遵守 |
-
-## 9. 真实性与已知限制
+## 8. 真实性与已知限制
 
 - 所有指标来自本机真实运行；失败样本与波动延迟原样保留。
 - 语义检索对语料中未出现的同义表述仍会失败（如「最左前缀原则」），未通过改标注掩盖。

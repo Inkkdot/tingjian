@@ -1,7 +1,7 @@
 ........................                                                 [100%]
 ============================== warnings summary ===============================
 apps\api\main.py:174
-  D:\oceanbase\projects\tingjian\apps\api\main.py:174: DeprecationWarning: 
+  <repo>\apps\api\main.py:174: DeprecationWarning: 
           on_event is deprecated, use lifespan event handlers instead.
   
           Read more about it in the
@@ -10,7 +10,7 @@ apps\api\main.py:174
     @app.on_event("startup")
 
 .venv\Lib\site-packages\fastapi\applications.py:4723
-  D:\oceanbase\projects\tingjian\.venv\Lib\site-packages\fastapi\applications.py:4723: DeprecationWarning: 
+  <repo>\.venv\Lib\site-packages\fastapi\applications.py:4723: DeprecationWarning: 
           on_event is deprecated, use lifespan event handlers instead.
   
           Read more about it in the

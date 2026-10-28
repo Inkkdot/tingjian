@@ -1,13 +1,12 @@
 # Qoder 开发记录 · 听见
 
-本文件记录「听见」从题面拆解到部署验证的主要开发过程。所有命令输出保存在
+本文件记录「听见」从需求拆解到部署验证的主要开发过程。所有命令输出保存在
 `artifacts/`，截图为真实运行画面。开发工作主要在 Qoder CN 桌面端完成：
 需求拆解、代码编写、测试排错、前端构建与 Qoder Sites 发布均由 Qoder 协助执行。
 
 - 开发日期：2026-10-28
 - 开发环境：Windows 11（x64）、Qoder CN 桌面端、Python 3.13、Node.js 24
-- 项目位置：公开仓库 `Inkkdot/tingjian`；同内容同步于参赛仓库 `qoder/tingjian/`
-- Qoder 账号 UID：`01a17e94-5842-7b39-86cd-7549fcae9edf`（取自 Qoder Sites 发布记录 `ownerUid`）
+- 项目位置：公开仓库 `Inkkdot/tingjian`；
 
 ## 起点：按架构文档锁定优先级
 
@@ -163,19 +162,19 @@ bash scripts/verify.sh
 站点发布：通过 Qoder Sites 准备、发布并设置为「任何人都可访问」。
 发布后的无登录访问与 Demo 路由已用 `curl` 验证返回 HTTP 200。
 
-## 阶段六 · 提交材料整理
+## 阶段六 · 项目材料整理
 
 - `README.md`：项目说明、运行步骤、6 步验证样例、DoD 命令与结果
 - `THIRD_PARTY_NOTICES.md`：依赖、模型与样例语料来源声明
 - `.env.example`：环境变量占位，不含真实凭据
 - `artifacts/`：M0 报告、评测指标、验证日志、截图、Qoder 会话截图
-- `SUBMISSION.md`：提交材料清单与公开站点地址
+- `SUBMISSION.md`：项目材料清单与公开站点地址
 
 ## Qoder 在开发中的实际作用
 
 | 环节 | Qoder 完成的工作 |
 | --- | --- |
-| 需求拆解 | 阅读三份文档，提取 M0 门禁、DoD 命令与提交材料要求，确定实施顺序 |
+| 需求拆解 | 阅读三份文档，提取 M0 门禁、DoD 命令与验收要求，确定实施顺序 |
 | 数据层 | 设计 seekdb 表结构、全文/向量索引、幂等导入与追溯链路 |
 | 检索 | 实现全文、向量、RRF、关键词覆盖与无答案门限 |
 | 调试 | 定位大小写词项漏匹配、孤立课程、复习清单重复计时等问题并修复 |
@@ -276,8 +275,7 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 | 复习候选证据 | `artifacts/review-candidates.json` |
 | 样例查询证据 | `artifacts/sample-check.json` |
 
-> 说明：Qoder 账号 UID 取自本机 Qoder Sites 发布记录中的 `ownerUid`，与账号头像 URL
-> 中的用户 ID 一致，未做猜测。其余开发记录、命令输出与截图均为本次真实开发产生。
+> 说明：其余开发记录、命令输出与截图均为本次真实开发产生。
 
 ## 阶段八 · 演示内容清理、浏览器内导入与检查器拖拽（2026-10-28）
 
@@ -314,9 +312,9 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
   搜索「冒烟测试」命中新讲次；结果卡片明确「未写入 seekdb，刷新后清空」。
 - Live 导入：`localhost:5173` 连 `127.0.0.1:8001` 的真实 seekdb，上传同款 SRT →
   3 条字幕 / 1 个片段 / 1 个向量，四步状态全部通过，返回 `video_id v-31e21c8505c07d`。
-- 截图见参赛仓库 `artifacts/screenshots/17-20`（含 B 站画面/封面，按素材 README 不进入公开仓库）。
+- B 站画面/封面截图仅在本地留存，按素材 README 不进入公开仓库。
 
-## 阶段九 · 导入回归修复、证据刷新与提交材料整理（2026-10-28）
+## 阶段九 · 导入回归修复、证据刷新与项目材料整理（2026-10-28）
 
 - 修复 SRT 导入回归：`_ingest_cues` 未向 `Store.ingest()` 转发 `cover_url`，导致
   `POST /api/import/srt` 抛 `TypeError`；补上 `cover_url` 转发。
@@ -327,19 +325,17 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 - 新增 `artifacts/verification-search.json`：真实 seekdb 混合检索「B+ 树的叶子节点怎么连接」
   的完整响应，同输入重复执行 Top3 一致。
 - 文档：`README.md` 更新 Demo 数据来源、库页跳转播放、单测数与最新延迟；
-  `SUBMISSION.md` 按题面重写为网站、仓库、运行说明、验证样例、Qoder 记录、合规与验收对照。
+  `SUBMISSION.md` 按验收要求重写为网站、仓库、运行说明、验证样例、Qoder 记录、合规与限制。
 - 站点：评测延迟表、Live 导入证据与演示素材版权措辞与当前产物对齐后重新发布。
 
 ## 阶段十 · Qoder 会话导出归档与脱敏（2026-10-28）
 
 - 归档 Qoder 桌面端开发会话全量导出（103,751 行 / 5.8 MB）为
   `artifacts/qoder-development/conversation-2026-10-28.md`，作为「Qoder 为主要开发工具」的补充证据。
-- 导入前脱敏：个人邮箱、本机用户名与 `C:\Users\*` / `/c/Users/*` 路径、Qoder 客户端账号名、
+- 导入前脱敏：个人邮箱、本机用户名与用户目录路径、Qoder 客户端账号名、
   设备标识、游客 buvid、公网 IP、已遮蔽 Token 统一替换为 `<redacted-*>` / `<user>`；
   对话正文、命令输出与结论未做修改。
-- 该文件含赛事内部讨论与工作区路径，只随参赛仓库提供；公开仓库保留会话截图与本文。
-- UID 复核：本机 10 份 Qoder Sites 发布记录的 `ownerUid` 均为
-  `01a17e94-5842-7b39-86cd-7549fcae9edf`，与账号头像 URL 中的用户 ID 相同。
+- 该文件含内部讨论与工作区路径，仅本地留存；公开仓库保留会话截图与本文。
 
 ## 阶段十一 · 侧栏仓库入口（2026-10-28）
 
