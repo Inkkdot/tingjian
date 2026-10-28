@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-28T11:48:50Z",
+  "timestamp": "2026-10-28T13:56:42Z",
   "checks": [
     {
       "name": "db_probe: store_ok and schema",
@@ -92,6 +92,7 @@
         "bvid": "BV1pW411W7Do",
         "title": "【公开课】数据库系统概论（王珊老师）（完结）",
         "owner": "150cico",
+        "pic": "http://i1.hdslb.com/bfs/archive/2ca0a7857f8989411793cd7530ddc0d7b815e60a.jpg",
         "duration_ms": 120826000,
         "parts": [
           {
@@ -405,8 +406,9 @@
         "part_title": "1.1概述(1)",
         "cid": 33419586,
         "subtitle_tracks": [],
-        "public_track_available": false,
-        "fallback_hint": "未发现公开字幕轨，请用「视频字幕提取器 Pro」导出 SRT 后在导入页上传。"
+        "track_available": false,
+        "authenticated": false,
+        "fallback_hint": "未发现字幕轨。配置本机 BILIBILI_COOKIE 可读取登录态字幕，或导出 SRT 后上传。"
       }
     },
     {
@@ -463,6 +465,7 @@
       "vector_search": true,
       "hybrid_search": true,
       "bilibili_import": false,
+      "bilibili_login": false,
       "bilibili_browser_fallback": true,
       "review_playlist": true,
       "asr": false,
@@ -489,12 +492,13 @@
     "status_code": 422,
     "body": {
       "code": "TRACK_NOT_AVAILABLE",
-      "message": "未发现无需登录即可读取的公开字幕轨。请用「视频字幕提取器 Pro」在浏览器导出 SRT 后，在导入页上传（服务端不会接触 Cookie）。",
+      "message": "未发现字幕轨。配置本机 BILIBILI_COOKIE 可读取登录态字幕，或用「视频字幕提取器 Pro」导出 SRT 后上传。",
       "detail": {
         "bvid": "BV1pW411W7Do",
         "cid": 33419586,
         "part_index": 1,
-        "path": "public_track_checked",
+        "path": "track_checked",
+        "authenticated": false,
         "hint": "browser_srt_fallback",
         "title": "【公开课】数据库系统概论（王珊老师）（完结）",
         "part_title": "1.1概述(1)"

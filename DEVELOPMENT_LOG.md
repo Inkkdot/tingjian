@@ -315,3 +315,17 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 - Live 导入：`localhost:5173` 连 `127.0.0.1:8001` 的真实 seekdb，上传同款 SRT →
   3 条字幕 / 1 个片段 / 1 个向量，四步状态全部通过，返回 `video_id v-31e21c8505c07d`。
 - 截图见参赛仓库 `artifacts/screenshots/17-20`（含 B 站画面/封面，按素材 README 不进入公开仓库）。
+
+## 阶段九 · 导入回归修复、证据刷新与提交材料整理（2026-10-28）
+
+- 修复 SRT 导入回归：`_ingest_cues` 未向 `Store.ingest()` 转发 `cover_url`，导致
+  `POST /api/import/srt` 抛 `TypeError`；补上 `cover_url` 转发。
+- 新增 `tests/unit/test_ingest_contract.py`，断言 SRT 导入路径把 `cover_url` 与
+  `platform_video_id` 原样传给存储层，防止同类参数遗漏。
+- 重跑 `bash scripts/verify.sh`：M0 通过、单元 24、集成 2、评测完成、前端构建通过；
+  `artifacts/verify/` 与 `artifacts/metrics.json` 同步刷新。
+- 新增 `artifacts/verification-search.json`：真实 seekdb 混合检索「B+ 树的叶子节点怎么连接」
+  的完整响应，同输入重复执行 Top3 一致。
+- 文档：`README.md` 更新 Demo 数据来源、库页跳转播放、单测数与最新延迟；
+  `SUBMISSION.md` 按题面重写为网站、仓库、运行说明、验证样例、Qoder 记录、合规与验收对照。
+- 站点：评测延迟表、Live 导入证据与演示素材版权措辞与当前产物对齐后重新发布。

@@ -5,8 +5,10 @@
 返回带时间戳的字幕片段；点击结果即可从对应时间点播放，并可生成限时复习清单。
 
 > Qoder × OceanBase 参赛作品。核心检索与存储完全运行在 **seekdb v1.4.0.0** 上；
-> 前端另有一份从真实 seekdb 导出的离线样例（Demo 模式），用于公开站点体验。
+> 公开站点另附离线 Demo：仓库内 `apps/web/public/fixture.json` 由本机 seekdb 导出，
+> 线上演示使用 B 站公开字幕快照（素材不进入公开仓库），两者都只用于界面演示。
 >
+> 项目网站：https://tingjian-qm1uiydhbox.qoder.zone
 > 公开代码仓库：https://github.com/Inkkdot/tingjian
 
 ## 解决的问题
@@ -16,7 +18,9 @@
 建立全文 + 向量双索引，并提供：
 
 - 一句自然语言查询 → 命中片段 + 可播放时间戳 + 命中原因；
-- 结果面板内嵌字幕上下文，点击时间戳定位本地视频；
+- 结果面板内嵌字幕上下文，点击时间戳定位本地视频，B 站视频走官方嵌入播放器；
+- 检查器可横向拖拽放大，播放器与字幕同步变宽；
+- 「我的库」点击讲次直接回到搜索页并打开该讲播放检查器；
 - 按主题与时间预算生成复习清单，选入项附理由；
 - 导入 SRT/VTT 或 B 站字幕轨，导入即建索引，重复导入幂等。
 
@@ -133,9 +137,11 @@ cd apps/web && npm run dev
 1. 进入「搜索」，输入 `B+ 树的叶子节点怎么连接`。
    - 预期：返回 5–10 条结果，Top1 属于「第 2 讲 索引与 B+ 树」，附带命中原因与时间戳。
 2. 点击 Top1。
-   - 预期：右侧出现该段字幕上下文；时间戳 chip 显示片段起止时间（实测 `00:43 – 01:24`）。
-3. 点击时间戳，选择本地同一视频文件。
-   - 预期：本地视频跳转到对应秒数；未选择文件时明确提示需要本地视频。
+   - 预期：右侧出现该段字幕上下文；时间戳 chip 显示片段起止时间（实测 `00:04 – 00:47`）。
+   - Top2（`00:43 – 01:24`）直接包含叶子节点链表的说明。
+3. 点击时间戳。
+   - Live 本地视频：选择本地同一视频文件，跳转到对应秒数；未选择时明确提示需要本地视频。
+   - B 站来源：检查器内嵌官方播放器，按时间戳定位；分隔条可横向拖拽放大。
 4. 进入「复习清单」，主题填 `事务隔离`，预算选 15 分钟，生成。
    - 预期：返回不超过 15:00 的条目列表，每项含选入理由与跳转时间。
 5. 输入无答案问题（如 `量子纠缠的贝尔不等式`）。
@@ -163,7 +169,7 @@ bash scripts/verify.sh
 ```bash
 .venv/Scripts/python.exe scripts/db_probe.py            # seekdb 建表/写入/FTS+向量 DDL
 .venv/Scripts/python.exe scripts/verify_m0.py           # M0：导入、幂等、SELECT 溯源、检索
-.venv/Scripts/python.exe -m pytest tests/unit -q        # 11 passed
+.venv/Scripts/python.exe -m pytest tests/unit -q        # 24 passed
 .venv/Scripts/python.exe -m pytest tests/integration -q # 2 passed（真实 seekdb）
 .venv/Scripts/python.exe scripts/eval_run.py --output artifacts/metrics.json
 cd apps/web && npm run build
@@ -173,9 +179,9 @@ cd apps/web && npm run build
 
 | 模式 | Hit@3 | 无答案识别 | 平均延迟 |
 | --- | --- | --- | --- |
-| 全文（ik） | 17/17 | 3/3 | 197.9 ms |
-| 向量（bge-small-zh） | 16/17 | 3/3 | 210.7 ms |
-| 混合（RRF k=60） | 17/17 | 3/3 | 347.0 ms |
+| 全文（ik） | 17/17 | 3/3 | 109.2 ms |
+| 向量（bge-small-zh） | 16/17 | 3/3 | 112.1 ms |
+| 混合（RRF k=60） | 17/17 | 3/3 | 210.6 ms |
 
 向量模式的失败样本是 `最左前缀原则`（语料中表述为「联合索引的最左列」），
 已在 `artifacts/metrics.json` 原样保留，没有为了分数调整标注。
@@ -197,17 +203,22 @@ M0 报告见 `artifacts/m0-report.json`，完整验证日志见 `artifacts/verif
 
 | | Live | Demo |
 | --- | --- | --- |
-| 数据源 | 本机 seekdb | `apps/web/public/fixture.json`（从真实 seekdb 导出） |
+| 数据源 | 本机 seekdb | 仓库内 fixture 由 seekdb 导出；线上演示为 B 站字幕快照 |
 | 检索 | seekdb 全文 + 向量 + RRF | 浏览器内关键词过滤，仅作展示 |
-| 导入 | 可用 | 禁用并提示 |
+| 导入 | 可用 | 浏览器内解析并加入临时索引，不写库 |
 | 适合 | 本地复现、评审验证 | 公开站点无后端时体验界面 |
 
 Demo 模式的所有结果页均有「离线样例」标识，不宣称语义检索能力。
-构建静态演示站：
+仓库内的自建语料演示由 `scripts/export_demo.py` 从本机 seekdb 导出
+`apps/web/public/fixture.json`，再执行 `cd apps/web && npm run build:demo` 生成 `dist-demo/`。
+
+线上站点的 B 站字幕快照用 `scripts/build_demo_fixture.mjs` 从本地演示素材目录构建：
 
 ```bash
-cd apps/web && npm run build:demo   # 产物 dist-demo/
+node scripts/build_demo_fixture.mjs --demo <演示素材目录> --out apps/web/dist-demo
 ```
+
+该素材（B 站封面与字幕）不进入公开仓库，也不随代码分发。
 
 ## B 站字幕：匿名公开轨、可选登录态与 SRT 兜底
 

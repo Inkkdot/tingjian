@@ -2,7 +2,7 @@ D:\oceanbase\projects\tingjian\.venv\Lib\site-packages\fastapi\testclient.py:1: 
   from starlette.testclient import TestClient as TestClient  # noqa
 Building prefix dict from the default dictionary ...
 Loading model from cache D:\oceanbase\projects\tingjian\jieba.cache
-Loading model cost 1.318 seconds.
+Loading model cost 0.466 seconds.
 Prefix dict has been built successfully.
 PASS db_probe: store_ok and schema
 PASS srt import via POST /api/import/srt

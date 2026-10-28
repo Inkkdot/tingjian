@@ -1,13 +1,13 @@
 Building prefix dict from the default dictionary ...
 Loading model from cache D:\oceanbase\projects\tingjian\jieba.cache
-Loading model cost 1.743 seconds.
+Loading model cost 0.772 seconds.
 Prefix dict has been built successfully.
 mode            Hit@3   NoAnswer   mean ms
-lexical    17/17       3/3          197.9
-semantic   16/17       3/3          210.7
-hybrid     17/17       3/3          347.0
+lexical    17/17       3/3          109.2
+semantic   16/17       3/3          112.1
+hybrid     17/17       3/3          210.6
 
 failures:
-  [semantic] miss: 最左前缀原则
+  [semantic] miss: 鏈�宸﹀墠缂�鍘熷垯
 
 wrote D:\oceanbase\projects\tingjian\artifacts\metrics.json

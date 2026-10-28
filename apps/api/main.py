@@ -145,6 +145,7 @@ def _ingest_cues(
         platform_video_id=platform_video_id,
         part_index=part_index,
         cid=cid,
+        cover_url=cover_url,
         subtitle_kind=subtitle_kind,
         duration_ms=duration_ms,
         offset_ms=offset_ms,

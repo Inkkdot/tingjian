@@ -19,9 +19,9 @@
       "no_answer_queries": 3,
       "no_answer_refused": 3,
       "no_answer_rate": 1.0,
-      "latency_ms_mean": 197.9,
-      "latency_ms_p95": 222.6,
-      "latency_ms_max": 229.9,
+      "latency_ms_mean": 109.2,
+      "latency_ms_p95": 168.8,
+      "latency_ms_max": 176.5,
       "rows": [
         {
           "query": "事务的原子性靠什么实现",
@@ -468,9 +468,9 @@
       "no_answer_queries": 3,
       "no_answer_refused": 3,
       "no_answer_rate": 1.0,
-      "latency_ms_mean": 210.7,
-      "latency_ms_p95": 243.1,
-      "latency_ms_max": 275.9,
+      "latency_ms_mean": 112.1,
+      "latency_ms_p95": 124.8,
+      "latency_ms_max": 145.7,
       "rows": [
         {
           "query": "事务的原子性靠什么实现",
@@ -1015,9 +1015,9 @@
       "no_answer_queries": 3,
       "no_answer_refused": 3,
       "no_answer_rate": 1.0,
-      "latency_ms_mean": 347.0,
-      "latency_ms_p95": 472.0,
-      "latency_ms_max": 592.2,
+      "latency_ms_mean": 210.6,
+      "latency_ms_p95": 259.9,
+      "latency_ms_max": 262.3,
       "rows": [
         {
           "query": "事务的原子性靠什么实现",
