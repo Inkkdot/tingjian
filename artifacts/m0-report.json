@@ -1,0 +1,505 @@
+{
+  "timestamp": "2026-10-28T11:48:50Z",
+  "checks": [
+    {
+      "name": "db_probe: store_ok and schema",
+      "ok": "1",
+      "detail": null
+    },
+    {
+      "name": "srt import via POST /api/import/srt",
+      "ok": true,
+      "detail": {
+        "video_id": "v-b25bde2a614d99",
+        "status": "replaced",
+        "cue_count": 43,
+        "passage_count": 6,
+        "embedded_count": 6,
+        "source_hash": "2d4614fffd89e0b328cf4e07006e13bfb114b5fc19db12c7005646874136b979",
+        "warnings": [],
+        "coverage": {
+          "cue_count": 43,
+          "passage_count": 6,
+          "covered_cues": 43,
+          "missing_cues": [],
+          "duration_ms": 196800
+        },
+        "course_id": "c-db",
+        "course_name": "数据库系统原理",
+        "filename": "db-01.srt"
+      }
+    },
+    {
+      "name": "cue/passage rows in seekdb match parse result",
+      "ok": true,
+      "detail": {
+        "stored_cues": 43,
+        "stored_passages": 6,
+        "result": {
+          "cues": 43,
+          "passages": 6
+        }
+      }
+    },
+    {
+      "name": "same source re-import is idempotent",
+      "ok": true,
+      "detail": {
+        "status": "unchanged",
+        "before": {
+          "courses": 2,
+          "videos": 5,
+          "cues": 187,
+          "passages": 23,
+          "embedded_passages": 23
+        },
+        "after": {
+          "courses": 2,
+          "videos": 5,
+          "cues": 187,
+          "passages": 23,
+          "embedded_passages": 23
+        }
+      }
+    },
+    {
+      "name": "source_hash persisted",
+      "ok": true,
+      "detail": "2d4614fffd89e0b328cf4e07006e13bfb114b5fc19db12c7005646874136b979"
+    },
+    {
+      "name": "SELECT returns cue text + timestamps by video_id",
+      "ok": true,
+      "detail": [
+        {
+          "seq": 1,
+          "start_ms": 4000,
+          "end_ms": 7960,
+          "text": "同学们好，这一讲我们讨论数据库事务。"
+        },
+        {
+          "seq": 2,
+          "start_ms": 8220,
+          "end_ms": 13710,
+          "text": "事务是一组数据库操作，它们要么全部成功，要么全部失败。"
+        }
+      ]
+    },
+    {
+      "name": "real Bilibili metadata probe",
+      "ok": true,
+      "detail": {
+        "bvid": "BV1pW411W7Do",
+        "title": "【公开课】数据库系统概论（王珊老师）（完结）",
+        "owner": "150cico",
+        "duration_ms": 120826000,
+        "parts": [
+          {
+            "cid": 33419586,
+            "page": 1,
+            "title": "1.1概述(1)",
+            "duration_ms": 2318000
+          },
+          {
+            "cid": 33420634,
+            "page": 2,
+            "title": "1.1概述(2)",
+            "duration_ms": 2883000
+          },
+          {
+            "cid": 33421235,
+            "page": 3,
+            "title": "1.2数据模型",
+            "duration_ms": 5333000
+          },
+          {
+            "cid": 33420653,
+            "page": 4,
+            "title": "1.3数据库系统结构",
+            "duration_ms": 2530000
+          },
+          {
+            "cid": 33419880,
+            "page": 5,
+            "title": "1.4 数据库系统组成(1)",
+            "duration_ms": 1729000
+          },
+          {
+            "cid": 33427392,
+            "page": 6,
+            "title": "2.1 关系数据结构及形式化定义",
+            "duration_ms": 2597000
+          },
+          {
+            "cid": 33427403,
+            "page": 7,
+            "title": "2.2 关系操作",
+            "duration_ms": 667000
+          },
+          {
+            "cid": 33427655,
+            "page": 8,
+            "title": "2.3关系的完整性",
+            "duration_ms": 1433000
+          },
+          {
+            "cid": 33427721,
+            "page": 9,
+            "title": "2.4 关系代数",
+            "duration_ms": 5745000
+          },
+          {
+            "cid": 33427846,
+            "page": 10,
+            "title": "2.5 关系演算",
+            "duration_ms": 4848000
+          },
+          {
+            "cid": 33710887,
+            "page": 11,
+            "title": "3.1 SQL概述",
+            "duration_ms": 2015000
+          },
+          {
+            "cid": 33723024,
+            "page": 12,
+            "title": "3.2数据定义",
+            "duration_ms": 2690000
+          },
+          {
+            "cid": 33710899,
+            "page": 13,
+            "title": "3.3数据查询(1)",
+            "duration_ms": 2939000
+          },
+          {
+            "cid": 33712099,
+            "page": 14,
+            "title": "3.3数据查询(2)",
+            "duration_ms": 5669000
+          },
+          {
+            "cid": 33711239,
+            "page": 15,
+            "title": "3.4",
+            "duration_ms": 1145000
+          },
+          {
+            "cid": 33711898,
+            "page": 16,
+            "title": "3.5 视图",
+            "duration_ms": 1640000
+          },
+          {
+            "cid": 33722994,
+            "page": 17,
+            "title": "4.1 计算机安全性概述",
+            "duration_ms": 1560000
+          },
+          {
+            "cid": 33730682,
+            "page": 18,
+            "title": "4.2安全控制",
+            "duration_ms": 2440000
+          },
+          {
+            "cid": 33725064,
+            "page": 19,
+            "title": "4.3 视图机制",
+            "duration_ms": 672000
+          },
+          {
+            "cid": 33730697,
+            "page": 20,
+            "title": "4.4 审计、数据加密以及统计数据安全性",
+            "duration_ms": 2216000
+          },
+          {
+            "cid": 33731454,
+            "page": 21,
+            "title": "5.1 实体完整性",
+            "duration_ms": 1856000
+          },
+          {
+            "cid": 33725090,
+            "page": 22,
+            "title": "5.2 参照完整性",
+            "duration_ms": 1125000
+          },
+          {
+            "cid": 33732154,
+            "page": 23,
+            "title": "5.3 用户定义的完整性",
+            "duration_ms": 770000
+          },
+          {
+            "cid": 33732615,
+            "page": 24,
+            "title": "5.4 完整性约束命名子句",
+            "duration_ms": 495000
+          },
+          {
+            "cid": 33732791,
+            "page": 25,
+            "title": "5.5 域中的完整性限制",
+            "duration_ms": 986000
+          },
+          {
+            "cid": 33732919,
+            "page": 26,
+            "title": "5.6 触发器",
+            "duration_ms": 2392000
+          },
+          {
+            "cid": 33733094,
+            "page": 27,
+            "title": "6.1 问题的提出",
+            "duration_ms": 2372000
+          },
+          {
+            "cid": 33758975,
+            "page": 28,
+            "title": "6.2 规范化",
+            "duration_ms": 3018000
+          },
+          {
+            "cid": 33758985,
+            "page": 29,
+            "title": "6.3 数据依赖的公理系统",
+            "duration_ms": 3765000
+          },
+          {
+            "cid": 33759634,
+            "page": 30,
+            "title": "6.4 模式的分解",
+            "duration_ms": 2185000
+          },
+          {
+            "cid": 33760244,
+            "page": 31,
+            "title": "7.1 数据库设计概述",
+            "duration_ms": 2802000
+          },
+          {
+            "cid": 33760635,
+            "page": 32,
+            "title": "7.2需求分析",
+            "duration_ms": 1419000
+          },
+          {
+            "cid": 33936072,
+            "page": 33,
+            "title": "7.3 概念结构设计",
+            "duration_ms": 5002000
+          },
+          {
+            "cid": 33936076,
+            "page": 34,
+            "title": "7.4 逻辑结构设计",
+            "duration_ms": 3036000
+          },
+          {
+            "cid": 33936464,
+            "page": 35,
+            "title": "7.5数据库物理设计",
+            "duration_ms": 2210000
+          },
+          {
+            "cid": 33937943,
+            "page": 36,
+            "title": "8.1 嵌入式SQL",
+            "duration_ms": 5119000
+          },
+          {
+            "cid": 33939357,
+            "page": 37,
+            "title": "8.2 存储过程",
+            "duration_ms": 2765000
+          },
+          {
+            "cid": 33939839,
+            "page": 38,
+            "title": "8.3 ODBC编程",
+            "duration_ms": 2042000
+          },
+          {
+            "cid": 33761660,
+            "page": 39,
+            "title": "9.1 关系数据库系统的查询处理",
+            "duration_ms": 2854000
+          },
+          {
+            "cid": 33761426,
+            "page": 40,
+            "title": "9.2 关系数据库系统的查询优化",
+            "duration_ms": 1859000
+          },
+          {
+            "cid": 33762392,
+            "page": 41,
+            "title": "9.3 代数优化",
+            "duration_ms": 3113000
+          },
+          {
+            "cid": 33937283,
+            "page": 42,
+            "title": "9.4 物理优化",
+            "duration_ms": 3305000
+          },
+          {
+            "cid": 33939961,
+            "page": 43,
+            "title": "10.1 事务和数据库恢复概述",
+            "duration_ms": 1156000
+          },
+          {
+            "cid": 33940109,
+            "page": 44,
+            "title": "10.2 故障种类和恢复实现技术",
+            "duration_ms": 2204000
+          },
+          {
+            "cid": 33940193,
+            "page": 45,
+            "title": "10.3 恢复策略",
+            "duration_ms": 1250000
+          },
+          {
+            "cid": 33940371,
+            "page": 46,
+            "title": "10.4 具有检查点的恢复技术和数据库镜像",
+            "duration_ms": 2154000
+          },
+          {
+            "cid": 33940476,
+            "page": 47,
+            "title": "11.1 并发控制概述",
+            "duration_ms": 1248000
+          },
+          {
+            "cid": 33940598,
+            "page": 48,
+            "title": "11.2 封锁",
+            "duration_ms": 397000
+          },
+          {
+            "cid": 33940690,
+            "page": 49,
+            "title": "11.3 活锁和死锁",
+            "duration_ms": 1099000
+          },
+          {
+            "cid": 33940739,
+            "page": 50,
+            "title": "11.4 并发调度的可串行性",
+            "duration_ms": 1600000
+          },
+          {
+            "cid": 33941178,
+            "page": 51,
+            "title": "11.5 两段锁协议和封锁的粒度",
+            "duration_ms": 2159000
+          }
+        ],
+        "part_index": 1,
+        "part_title": "1.1概述(1)",
+        "cid": 33419586,
+        "subtitle_tracks": [],
+        "public_track_available": false,
+        "fallback_hint": "未发现公开字幕轨，请用「视频字幕提取器 Pro」导出 SRT 后在导入页上传。"
+      }
+    },
+    {
+      "name": "Bilibili import path returns classified result (not a crash)",
+      "ok": true,
+      "detail": {
+        "status_code": 422,
+        "code": "TRACK_NOT_AVAILABLE"
+      }
+    },
+    {
+      "name": "search over real seekdb returns traceable hit",
+      "ok": true,
+      "detail": [
+        {
+          "passage_id": "p-v-b25bde2a614d99-0009",
+          "video_id": "v-b25bde2a614d99",
+          "course_id": "c-db",
+          "video_title": "第 1 讲 事务与 ACID",
+          "course_name": "数据库系统原理",
+          "start_ms": 43030,
+          "end_ms": 85170,
+          "cue_start_seq": 9,
+          "cue_end_seq": 17,
+          "text": "第一个是原子性，Atomicity。原子性要求事务中的操作不可再分。任何一步失败，已经执行的部分都要撤销。实现原子性依赖撤销日志，也就是 undo log。第二个是一致性，Consistency。一致性要求事务把数据库从一个合法状态带到另一个合法状态。唯一约束、外键约束和检查约束都在维护一致性。第三个是隔离性，Isolation。隔离性描述多个并发事务之间应该如何互不干扰。",
+          "source_url": "",
+          "jump_url": "",
+          "playback_capability": "local_select",
+          "match_reason": "关键词 + 语义共同命中",
+          "score": 0.032522,
+          "rank": 1,
+          "lexical_score": 2.866106,
+          "semantic_score": 0.604915
+        }
+      ]
+    }
+  ],
+  "health": {
+    "mode": "live",
+    "store_ok": true,
+    "database": "seekdb",
+    "database_version": "5.7.25-OceanBase seekdb-v1.4.0.0",
+    "schema_version": "1",
+    "embedding_model": "bge-small-zh-v1.5",
+    "embedding_error": null,
+    "course_count": 2,
+    "video_count": 5,
+    "cue_count": 187,
+    "passage_count": 23,
+    "embedded_passage_count": 23,
+    "error": null,
+    "capabilities": {
+      "lexical_search": true,
+      "vector_search": true,
+      "hybrid_search": true,
+      "bilibili_import": false,
+      "bilibili_browser_fallback": true,
+      "review_playlist": true,
+      "asr": false,
+      "llm_summary": false
+    }
+  },
+  "video_id": "v-b25bde2a614d99",
+  "cues_sample": [
+    {
+      "seq": 1,
+      "start_ms": 4000,
+      "end_ms": 7960,
+      "text": "同学们好，这一讲我们讨论数据库事务。"
+    },
+    {
+      "seq": 2,
+      "start_ms": 8220,
+      "end_ms": 13710,
+      "text": "事务是一组数据库操作，它们要么全部成功，要么全部失败。"
+    }
+  ],
+  "bilibili_public_track_available": false,
+  "bilibili_import": {
+    "status_code": 422,
+    "body": {
+      "code": "TRACK_NOT_AVAILABLE",
+      "message": "未发现无需登录即可读取的公开字幕轨。请用「视频字幕提取器 Pro」在浏览器导出 SRT 后，在导入页上传（服务端不会接触 Cookie）。",
+      "detail": {
+        "bvid": "BV1pW411W7Do",
+        "cid": 33419586,
+        "part_index": 1,
+        "path": "public_track_checked",
+        "hint": "browser_srt_fallback",
+        "title": "【公开课】数据库系统概论（王珊老师）（完结）",
+        "part_title": "1.1概述(1)"
+      }
+    }
+  },
+  "bilibili_note": "Public subtitle tracks required login in this environment. The Bilibili path is implemented and classified; M0 evidence uses the documented SRT fallback (POST /api/import/srt). Upload a browser-script-exported SRT to bind a real Bilibili source_url."
+}

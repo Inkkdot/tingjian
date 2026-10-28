@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+fastembed_cache/
+jieba.cache
+node_modules/
+dist/
+dist-demo/
+*.log
+!artifacts/verify/*.log
+*.tsbuildinfo

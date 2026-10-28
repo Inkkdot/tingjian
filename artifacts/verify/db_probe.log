@@ -1,0 +1,54 @@
+{
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "connection": {
+    "host": "127.0.0.1",
+    "port": 2881,
+    "user": "root",
+    "database": "tingjian"
+  },
+  "checks": [
+    {
+      "name": "create/insert/select",
+      "ok": true,
+      "rows": 3
+    },
+    {
+      "name": "fulltext ik chinese",
+      "ok": true,
+      "hits": [
+        {
+          "id": 1,
+          "s": 1.0652287888959049
+        }
+      ],
+      "term": "∏Ù¿Î–‘"
+    },
+    {
+      "name": "vector cosine distance",
+      "ok": true,
+      "hits": [
+        {
+          "id": 1,
+          "d": 0.0
+        },
+        {
+          "id": 3,
+          "d": 0.10291478153103295
+        },
+        {
+          "id": 2,
+          "d": 0.33333333954215016
+        }
+      ]
+    },
+    {
+      "name": "fulltext + vector indexes coexist",
+      "ok": true
+    }
+  ],
+  "version": "5.7.25-OceanBase seekdb-v1.4.0.0",
+  "ddl": "CREATE TABLE `probe_fts` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `content` text DEFAULT NULL,\n  `embedding` VECTOR(4) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  FULLTEXT KEY `ft` (`content`) WITH PARSER ik PARSER_PROPERTIES=(ik_mode=\"smart\") BLOCK_SIZE 16384,\n  VECTOR KEY `vec` (`embedding`) WITH (DISTANCE=COSINE, TYPE=HNSW, LIB=VSAG, M=16, EF_CONSTRUCTION=200, EF_SEARCH=64) BLOCK_SIZE 16384\n) ORGANIZATION INDEX AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 ROW_FORMAT = DYNAMIC COMPRESSION = 'zstd_1.3.8' BLOCK_SIZE = 16384 TABLET_SIZE = 134217728 PCTFREE = 0",
+  "ok": true,
+  "timestamp": "2026-10-28T11:48:49Z"
+}

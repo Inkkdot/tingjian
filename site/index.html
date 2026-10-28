@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>听见 · 课程视频字幕检索与复习</title>
+  <meta name="description" content="听见：把课程视频字幕变成可检索、可跳转、可复习的知识索引。基于 seekdb 全文与向量混合检索，支持时间戳定位、无答案拒答和预算内复习清单。" />
+  <meta property="og:title" content="听见 · 课程视频字幕检索与复习" />
+  <meta property="og:description" content="搜到一句话，跳到那一秒。基于 seekdb 的课程视频字幕检索与复习系统。" />
+  <meta property="og:image" content="./assets/02-results.png" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="听见首页">
+      <span class="brand-mark">听</span>
+      <span class="brand-text"><strong>听见</strong><small>课程视频字幕检索</small></span>
+    </a>
+    <nav aria-label="页面导航">
+      <a href="#product">产品</a>
+      <a href="#scene">场景</a>
+      <a href="#evidence">验证</a>
+      <a href="#run">运行</a>
+      <a class="nav-cta" href="./demo/?demo=1">在线演示</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="dot"></span> Qoder × OceanBase · seekdb v1.4</div>
+        <h1>搜到一句话，<br /><em>跳到那一秒。</em></h1>
+        <p class="lede">
+          课程视频越积越多，真正难的是在复习时找回“老师到底在哪一分钟讲过这个点”。
+          听见把字幕切成语义片段，写入 seekdb，用中文全文 + 向量混合检索定位到具体讲次与时间戳。
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="./demo/?demo=1">打开在线演示 <span aria-hidden="true">→</span></a>
+          <a class="btn ghost" href="https://github.com/Inkkdot/tingjian" target="_blank" rel="noreferrer">查看代码仓库</a>
+        </div>
+        <p class="fineprint">演示站为离线样例：搜索在浏览器内完成，用于评审体验；真实检索需按运行说明连接 seekdb。完整源码与开发记录已公开。</p>
+      </div>
+      <figure class="hero-shot">
+        <div class="browser">
+          <div class="browser-bar"><span></span><span></span><span></span><i>127.0.0.1:5173</i></div>
+          <img src="./assets/02-results.png" alt="听见搜索结果页：查询 B+ 树的叶子节点怎么连接，首条命中第 2 讲 00:43–01:24" />
+        </div>
+        <figcaption>真实运行截图：查询「B+ 树的叶子节点怎么连接」，首条命中第 2 讲 00:43–01:24。</figcaption>
+      </figure>
+    </section>
+
+    <section class="stats" aria-label="关键数据">
+      <div><strong>17/17</strong><span>混合检索 Hit@3</span></div>
+      <div><strong>3/3</strong><span>无答案问题正确拒答</span></div>
+      <div><strong>187</strong><span>条字幕进入 seekdb</span></div>
+      <div><strong>23</strong><span>个片段生成真实向量</span></div>
+    </section>
+
+    <section id="product" class="section">
+      <div class="section-head">
+        <p class="kicker">它解决什么</p>
+        <h2>从“记得老师讲过”，到“定位到那一句”。</h2>
+        <p>
+          通用搜索只给视频标题，播放器进度条又无法回答概念问题。听见把字幕当作一等数据：
+          逐句保留时间戳，按语义切段，建立全文与向量索引，并让每条结果都能回溯到原始字幕。
+        </p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span class="num">01</span>
+          <h3>字幕落库，可追溯</h3>
+          <p>解析 SRT / VTT，按 20–45 秒切分为语义片段，保留 cue → passage → hit 的全链路映射。重复导入按 source_hash 与 index_version 幂等处理。</p>
+          <ul>
+            <li>seekdb FULLTEXT + ik 分词</li>
+            <li>VECTOR(512) + HNSW / VSAG</li>
+            <li>原始字幕与片段一一对应</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="num">02</span>
+          <h3>混合检索，能拒答</h3>
+          <p>中文全文召回与 bge-small-zh-v1.5 语义召回并行，RRF（k=60）融合排序。关键词覆盖过滤压掉弱相关结果，低于阈值时明确回答“没找到”，不硬凑答案。</p>
+          <ul>
+            <li>全文 / 语义 / 混合三种模式</li>
+            <li>Top3 命中同一讲次 ±15 秒</li>
+            <li>无答案集 3/3 拒答</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="num">03</span>
+          <h3>预算内的复习清单</h3>
+          <p>输入考点与可用时间，按相关度优先、覆盖增益贪心选片；同一视频的重叠区间合并计时，保证实际播放时长不超预算，并给每条片段写明入选理由。</p>
+          <ul>
+            <li>严格时间预算</li>
+            <li>区间并集，不重复计时</li>
+            <li>每条结果可移除、可跳转</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="scene" class="section split">
+      <div class="split-copy">
+        <p class="kicker">真实界面</p>
+        <h2>搜索、核对原文、跳转播放，在同一个工作台完成。</h2>
+        <p>
+          结果卡直接给出讲次、课程、时间戳、命中原因与片段原文。点开右侧检查器可以查看该讲次全部 40 条字幕，
+          点时间戳即可带着定位参数跳转播放器；不确定答案时，系统会说明“没有足够证据”，而不是给出看似合理的错误片段。
+        </p>
+        <ul class="checks">
+          <li><span>✓</span> 关键词命中与语义召回分别标注，排序理由可见</li>
+          <li><span>✓</span> 每条结果保留原始 cue 区间，可回查上下文</li>
+          <li><span>✓</span> 课程 / 讲次 / 片段三层过滤</li>
+        </ul>
+      </div>
+      <figure class="panel-shot">
+        <img src="./assets/03-inspector.png" alt="字幕检查器：右侧展示第 2 讲全部字幕与时间戳" loading="lazy" />
+        <figcaption>字幕检查器：40 条原始字幕与片段边界同时可见。</figcaption>
+      </figure>
+    </section>
+
+    <section class="section split reverse">
+      <div class="split-copy">
+        <p class="kicker">复习清单</p>
+        <h2>不是“相关视频列表”，而是<em>能排进今晚时间表</em>的片段。</h2>
+        <p>
+          以「数据库事务与索引」为例，15 分钟预算生成了 12 个片段、总时长 6 分 55 秒。
+          系统会合并同一讲次中重叠的播放区间，避免把同一段内容重复计时；覆盖增益只作为相关度之后的次级信号，
+          不会为了“看起来多样”塞进无关课程。
+        </p>
+        <div class="mini-metrics">
+          <div><strong>6:55</strong><span>实际播放时长</span></div>
+          <div><strong>12</strong><span>入选片段</span></div>
+          <div><strong>1</strong><span>覆盖课程</span></div>
+        </div>
+      </div>
+      <figure class="panel-shot">
+        <img src="./assets/04-review.png" alt="复习清单：12 个片段，总时长 6 分 55 秒，预算 15 分钟" loading="lazy" />
+        <figcaption>真实运行截图：预算 15 分钟，生成 12 个片段，合并重叠后 6 分 55 秒。</figcaption>
+      </figure>
+    </section>
+
+    <section class="section architecture">
+      <div class="section-head">
+        <p class="kicker">技术实现</p>
+        <h2>seekdb 承担检索核心，FastAPI 只做编排。</h2>
+        <p>字幕、片段、向量与全文索引都在 seekdb 中；应用层不维护第二套检索状态，也不使用 SQLite / Mock 冒充数据库能力。</p>
+      </div>
+      <div class="flow" role="list" aria-label="数据流">
+        <div class="flow-step" role="listitem"><span>输入</span><strong>B 站公开字幕 / SRT / VTT</strong><small>公开轨不可用时，明确回退到浏览器字幕导出</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step" role="listitem"><span>写入</span><strong>cue → passage → embedding</strong><small>幂等导入，保留 source_hash 与 index_version</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step" role="listitem"><span>检索</span><strong>FULLTEXT + VECTOR + RRF</strong><small>ik 分词、COSINE / HNSW，Top3 时间戳对齐</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step" role="listitem"><span>交付</span><strong>React 工作台 + 复习清单</strong><small>Live / Demo 共用同一套 DTO</small></div>
+      </div>
+      <div class="stack">
+        <span>Python 3.13</span><span>FastAPI</span><span>seekdb 1.4.0.0</span><span>PyMySQL</span>
+        <span>bge-small-zh-v1.5</span><span>jieba</span><span>React 19</span><span>TypeScript</span><span>Vite 6</span><span>Tailwind 4</span>
+      </div>
+    </section>
+
+    <section id="evidence" class="section evidence">
+      <div class="section-head">
+        <p class="kicker">可核对的结果</p>
+        <h2>评测不是形容词，是一张保留失败样本的表。</h2>
+        <p>20 条人工标注查询（17 条有答案、3 条无答案），判定规则为 Top3 命中同一讲次且起点在标注时间 ±15 秒内。下表来自 <code>scripts/eval_run.py</code> 的真实运行输出。</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>模式</th><th>Hit@3</th><th>无答案拒绝</th><th>平均延迟</th><th>P95</th></tr></thead>
+          <tbody>
+            <tr><td>全文（ik）</td><td>17/17</td><td>3/3</td><td>197.9 ms</td><td>222.6 ms</td></tr>
+            <tr><td>语义（bge）</td><td>16/17</td><td>3/3</td><td>210.7 ms</td><td>243.1 ms</td></tr>
+            <tr><td>混合（RRF）</td><td>17/17</td><td>3/3</td><td>347.0 ms</td><td>472.0 ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        语义模式仍有 1 条同义改写（「最左前缀原则」）未命中，已保留在失败样本中，没有调参掩盖。
+        延迟为单机 Docker 环境实测均值，会随机器负载波动。M0 门禁、单元测试、集成测试与前端构建全部通过，日志保存在仓库 <code>artifacts/verify/</code>。
+      </p>
+      <div class="evidence-grid">
+        <figure><img src="./assets/05-settings.png" alt="设置页展示 seekdb 连接、能力矩阵与检索评测" loading="lazy" /><figcaption>能力矩阵直接读取 /api/health，不伪造“可用”状态。</figcaption></figure>
+        <figure><img src="./assets/06-demo.png" alt="离线 Demo 模式：关于虚拟内存的 4 条样例结果" loading="lazy" /><figcaption>离线 Demo 使用真实 seekdb 导出的 fixture，搜索在浏览器端完成。</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section demo-band">
+      <div>
+        <p class="kicker">体验入口</p>
+        <h2>不装环境，也能先试一次。</h2>
+        <p>在线演示只加载离线快照，支持关键词过滤与片段查看，不需要登录，也不会连接任何后端。要验证全文 / 向量 / RRF 的真实行为，请按运行说明启动 seekdb 与 FastAPI。</p>
+      </div>
+      <a class="btn light" href="./demo/?demo=1">进入离线演示 <span aria-hidden="true">→</span></a>
+    </section>
+
+    <section id="run" class="section run">
+      <div class="section-head">
+        <p class="kicker">运行说明</p>
+        <h2>三步跑通主要功能。</h2>
+        <p>完整步骤、环境变量与故障排查见仓库 README。以下命令在项目根目录执行。</p>
+      </div>
+      <div class="code-grid">
+        <div class="code-card">
+          <span>1 · 启动 seekdb</span>
+          <pre><code>docker run -d --name seekdb-sdd -p 2881:2881 \
+  quay.io/oceanbase/seekdb:latest</code></pre>
+        </div>
+        <div class="code-card">
+          <span>2 · 安装并导入样例</span>
+          <pre><code>python -m venv .venv
+.venv/Scripts/pip install -r apps/api/requirements.txt
+.venv/Scripts/python scripts/import_fixture.py</code></pre>
+        </div>
+        <div class="code-card">
+          <span>3 · 启动前后端</span>
+          <pre><code>.venv/Scripts/python -m uvicorn main:app \
+  --app-dir apps/api --port 8001
+cd apps/web &amp;&amp; npm install &amp;&amp; npm run dev</code></pre>
+        </div>
+      </div>
+      <details>
+        <summary>查看完整验收命令与验证样例</summary>
+        <div class="details-body">
+          <p>一条命令跑完 M0、单元测试、集成测试、评测与前端构建：</p>
+          <pre><code>bash scripts/verify.sh</code></pre>
+          <p>验证样例：搜索「B+ 树的叶子节点怎么连接」，预期首条为「第 2 讲 索引与 B+ 树」，片段区间 <code>00:43–01:24</code>，展开检查器可看到 40 条原始字幕。</p>
+          <p>评测输出写入 <code>artifacts/metrics.json</code>，M0 报告写入 <code>artifacts/m0-report.json</code>，逐步日志在 <code>artifacts/verify/</code>。</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="section devlog">
+      <div class="section-head">
+        <p class="kicker">Qoder 开发记录</p>
+        <h2>从题面拆解到验收，主要开发过程在 Qoder 中完成。</h2>
+        <p>
+          项目按架构文档的优先级推进：先过 M0（字幕落库与可追溯），再做全文检索与 UI，随后接入真实向量、RRF 与评测，最后实现预算内复习清单。
+          每一阶段的真实命令输出、失败与修复都保留在仓库的开发记录中。
+        </p>
+      </div>
+      <div class="devlog-grid">
+        <div><span>阶段 1</span><strong>M0 门禁</strong><p>SRT 解析、幂等导入、cue/passage 对齐；公开轨不可用如实记录并保留 SRT 回退。</p></div>
+        <div><span>阶段 2</span><strong>检索与工作台</strong><p>ik 全文、关键词覆盖、检查器与时间戳跳转；修复大小写导致的词项漏匹配。</p></div>
+        <div><span>阶段 3</span><strong>向量与评测</strong><p>接入 bge-small-zh-v1.5、RRF k=60、无答案阈值；20 条标注集真实评测。</p></div>
+        <div><span>阶段 4</span><strong>复习清单</strong><p>相关度优先贪心、区间并集计时；修掉跨课程稀释与重复计时两个真实缺陷。</p></div>
+      </div>
+      <figure class="panel-shot">
+        <img src="./assets/07-qoder-session.png" alt="Qoder 会话记录：执行构建命令、读取验证截图并检查离线 Demo 数据" loading="lazy" />
+        <figcaption>Qoder 会话中的真实执行记录：终端命令、文件读取与逐项验证，而非事后补写的说明。</figcaption>
+      </figure>
+      <p class="devlog-link">
+        完整时间线与命令记录：<a href="https://github.com/Inkkdot/tingjian/blob/main/DEVELOPMENT_LOG.md" target="_blank" rel="noreferrer">DEVELOPMENT_LOG.md</a>
+        · 验证材料与截图：<a href="https://github.com/Inkkdot/tingjian/artifacts" target="_blank" rel="noreferrer">artifacts/</a>
+      </p>
+    </section>
+
+    <section class="section limits">
+      <div class="section-head">
+        <p class="kicker">边界与已知限制</p>
+        <h2>没有做的，也写清楚。</h2>
+      </div>
+      <div class="limits-grid">
+        <div><strong>B 站公开轨</strong><p>当前网络环境下公开字幕轨探测不可用，导入路径会返回分类结果而不是崩溃；支持浏览器导出 SRT 后上传。未使用伪造字幕冒充公开轨。</p></div>
+        <div><strong>语料规模</strong><p>样例语料为 2 门课、5 讲、187 条字幕，用于完整验证链路，不代表大规模课程库性能。评测延迟是单机 Docker 实测值。</p></div>
+        <div><strong>真实使用数据</strong><p>尚无真实用户使用统计，因此站点不展示使用人数或提效比例；上线后的站点访问统计可在 Qoder Sites 后台查看。</p></div>
+        <div><strong>ASR / LLM 摘要</strong><p>未实现，能力矩阵中明确标注“不可用”，不以占位功能冒充完成。</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand">
+      <span class="brand-mark">听</span>
+      <span class="brand-text"><strong>听见</strong><small>让课程字幕可检索、可跳转、可复习</small></span>
+    </div>
+    <div class="foot-links">
+      <a href="./demo/?demo=1">在线演示</a>
+      <a href="https://github.com/Inkkdot/tingjian" target="_blank" rel="noreferrer">代码仓库</a>
+      <a href="https://github.com/Inkkdot/tingjian/blob/main/README.md" target="_blank" rel="noreferrer">运行说明</a>
+    </div>
+    <p class="copy">基于 seekdb 构建 · 示例语料为自建，仅用于功能验证</p>
+  </footer>
+</body>
+</html>

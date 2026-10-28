@@ -1,0 +1,41 @@
+{
+  "videos": [
+    {
+      "video_id": "v-087be07345e1c3",
+      "cues": 34,
+      "passages": 4,
+      "embedded": 4,
+      "warning": null
+    },
+    {
+      "video_id": "v-6c5deff11b3296",
+      "cues": 40,
+      "passages": 5,
+      "embedded": 5,
+      "warning": null
+    },
+    {
+      "video_id": "v-b25bde2a614d99",
+      "cues": 43,
+      "passages": 6,
+      "embedded": 6,
+      "warning": null
+    },
+    {
+      "video_id": "v-5fba3cb5fd54de",
+      "cues": 36,
+      "passages": 4,
+      "embedded": 4,
+      "warning": null
+    },
+    {
+      "video_id": "v-b3700d81d281ba",
+      "cues": 34,
+      "passages": 4,
+      "embedded": 4,
+      "warning": null
+    }
+  ],
+  "index_version": "1",
+  "skip_embeddings": false
+}

@@ -1,0 +1,79 @@
+{
+  "courses": {
+    "c-db": {
+      "name": "数据库系统原理",
+      "term": "2026 春"
+    },
+    "c-os": {
+      "name": "操作系统",
+      "term": "2026 春"
+    }
+  },
+  "lectures": [
+    {
+      "id": "db-01",
+      "course_id": "c-db",
+      "title": "第 1 讲 事务与 ACID",
+      "file": "db-01.srt",
+      "source_url": "",
+      "source_type": "authored_srt",
+      "platform": "local",
+      "platform_video_id": "db-01",
+      "part_index": 1,
+      "language": "zh",
+      "license": "CC BY 4.0 / self-authored for this project"
+    },
+    {
+      "id": "db-02",
+      "course_id": "c-db",
+      "title": "第 2 讲 索引与 B+ 树",
+      "file": "db-02.srt",
+      "source_url": "",
+      "source_type": "authored_srt",
+      "platform": "local",
+      "platform_video_id": "db-02",
+      "part_index": 1,
+      "language": "zh",
+      "license": "CC BY 4.0 / self-authored for this project"
+    },
+    {
+      "id": "db-03",
+      "course_id": "c-db",
+      "title": "第 3 讲 查询优化与执行计划",
+      "file": "db-03.srt",
+      "source_url": "",
+      "source_type": "authored_srt",
+      "platform": "local",
+      "platform_video_id": "db-03",
+      "part_index": 1,
+      "language": "zh",
+      "license": "CC BY 4.0 / self-authored for this project"
+    },
+    {
+      "id": "os-04",
+      "course_id": "c-os",
+      "title": "第 4 讲 进程与线程",
+      "file": "os-04.srt",
+      "source_url": "",
+      "source_type": "authored_srt",
+      "platform": "local",
+      "platform_video_id": "os-04",
+      "part_index": 1,
+      "language": "zh",
+      "license": "CC BY 4.0 / self-authored for this project"
+    },
+    {
+      "id": "os-05",
+      "course_id": "c-os",
+      "title": "第 5 讲 虚拟内存",
+      "file": "os-05.srt",
+      "source_url": "",
+      "source_type": "authored_srt",
+      "platform": "local",
+      "platform_video_id": "os-05",
+      "part_index": 1,
+      "language": "zh",
+      "license": "CC BY 4.0 / self-authored for this project"
+    }
+  ]
+}

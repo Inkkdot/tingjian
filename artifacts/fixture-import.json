@@ -1,0 +1,117 @@
+[
+  {
+    "lecture": "db-01",
+    "status_code": 200,
+    "body": {
+      "video_id": "v-b25bde2a614d99",
+      "status": "created",
+      "cue_count": 43,
+      "passage_count": 6,
+      "embedded_count": 6,
+      "source_hash": "2d4614fffd89e0b328cf4e07006e13bfb114b5fc19db12c7005646874136b979",
+      "warnings": [],
+      "coverage": {
+        "cue_count": 43,
+        "passage_count": 6,
+        "covered_cues": 43,
+        "missing_cues": [],
+        "duration_ms": 196800
+      },
+      "course_id": "c-db",
+      "course_name": "数据库系统原理",
+      "filename": "db-01.srt"
+    }
+  },
+  {
+    "lecture": "db-02",
+    "status_code": 200,
+    "body": {
+      "video_id": "v-6c5deff11b3296",
+      "status": "created",
+      "cue_count": 40,
+      "passage_count": 5,
+      "embedded_count": 5,
+      "source_hash": "beae6e57a06ce29f5cded8a93ecf199dd437a7bd39d6bfae6b59fb5e7326e205",
+      "warnings": [],
+      "coverage": {
+        "cue_count": 40,
+        "passage_count": 5,
+        "covered_cues": 40,
+        "missing_cues": [],
+        "duration_ms": 160100
+      },
+      "course_id": "c-db",
+      "course_name": "数据库系统原理",
+      "filename": "db-02.srt"
+    }
+  },
+  {
+    "lecture": "db-03",
+    "status_code": 200,
+    "body": {
+      "video_id": "v-087be07345e1c3",
+      "status": "created",
+      "cue_count": 34,
+      "passage_count": 4,
+      "embedded_count": 4,
+      "source_hash": "f5e47679939d2627fabe634151f32e4dff9eb05546acfcc092709d2a41df9218",
+      "warnings": [],
+      "coverage": {
+        "cue_count": 34,
+        "passage_count": 4,
+        "covered_cues": 34,
+        "missing_cues": [],
+        "duration_ms": 134130
+      },
+      "course_id": "c-db",
+      "course_name": "数据库系统原理",
+      "filename": "db-03.srt"
+    }
+  },
+  {
+    "lecture": "os-04",
+    "status_code": 200,
+    "body": {
+      "video_id": "v-5fba3cb5fd54de",
+      "status": "created",
+      "cue_count": 36,
+      "passage_count": 4,
+      "embedded_count": 4,
+      "source_hash": "35d82584c85a1c1a15493f72051d2fcdda6bff8e28ee859c08e8432ff03272c0",
+      "warnings": [],
+      "coverage": {
+        "cue_count": 36,
+        "passage_count": 4,
+        "covered_cues": 36,
+        "missing_cues": [],
+        "duration_ms": 142050
+      },
+      "course_id": "c-os",
+      "course_name": "操作系统",
+      "filename": "os-04.srt"
+    }
+  },
+  {
+    "lecture": "os-05",
+    "status_code": 200,
+    "body": {
+      "video_id": "v-b3700d81d281ba",
+      "status": "created",
+      "cue_count": 34,
+      "passage_count": 4,
+      "embedded_count": 4,
+      "source_hash": "7ceb887c082465e5fa59890c21edfe1d54e293315a64292a4d08eb3f67d823c0",
+      "warnings": [],
+      "coverage": {
+        "cue_count": 34,
+        "passage_count": 4,
+        "covered_cues": 34,
+        "missing_cues": [],
+        "duration_ms": 132430
+      },
+      "course_id": "c-os",
+      "course_name": "操作系统",
+      "filename": "os-05.srt"
+    }
+  }
+]

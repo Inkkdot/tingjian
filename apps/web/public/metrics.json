@@ -1,0 +1,1579 @@
+{
+  "corpus": {
+    "courses": 2,
+    "videos": 5,
+    "cues": 187,
+    "passages": 23
+  },
+  "annotation": {
+    "total_queries": 20,
+    "no_answer": 3,
+    "tolerance_ms": 15000,
+    "hit_rule": "Top3 contains same lecture within +/-15s of labeled cue start"
+  },
+  "modes": {
+    "lexical": {
+      "answered_queries": 17,
+      "hit_at_3": 17,
+      "hit_at_3_rate": 1.0,
+      "no_answer_queries": 3,
+      "no_answer_refused": 3,
+      "no_answer_rate": 1.0,
+      "latency_ms_mean": 197.9,
+      "latency_ms_p95": 222.6,
+      "latency_ms_max": 229.9,
+      "rows": [
+        {
+          "query": "事务的原子性靠什么实现",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 55520,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 43030,
+              "end_ms": 85170,
+              "reason": "关键词命中",
+              "score": 2.8661063059955216
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 191700,
+              "end_ms": 211720,
+              "reason": "关键词命中",
+              "score": 1.9326896873742472
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词命中",
+              "score": 1.754808074462348
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "脏读是什么",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 109760,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 115510,
+              "end_ms": 157650,
+              "reason": "关键词命中",
+              "score": 1.5356094717860493
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 80530,
+              "end_ms": 121170,
+              "reason": "关键词命中",
+              "score": 1.0381691019107213
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "间隙锁的作用",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 167030,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词命中",
+              "score": 1.948708873131669
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "为什么数据库使用 B+ 树",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 30680,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "关键词命中",
+              "score": 2.940109272874299
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "关键词命中",
+              "score": 0.7078646704670766
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 115510,
+              "end_ms": 157650,
+              "reason": "关键词命中",
+              "score": 0.510803683511297
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "什么是回表",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 89590,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "关键词命中",
+              "score": 1.2194220871850787
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 82000,
+              "end_ms": 124420,
+              "reason": "关键词命中",
+              "score": 0.6262985476364118
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "关键词命中",
+              "score": 0.5654353401536247
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "最左前缀原则",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 99700,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "关键词命中",
+              "score": 2.287895453853489
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "索引失效的常见原因",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 120120,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "关键词命中",
+              "score": 1.6650302816445475
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 120120,
+              "end_ms": 163420,
+              "reason": "关键词命中",
+              "score": 0.9520727764075086
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "关键词命中",
+              "score": 0.665525743080633
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "如何查看执行计划",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-087be07345e1c3",
+          "expected_start_ms": 34730,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 4000,
+              "end_ms": 48830,
+              "reason": "关键词命中",
+              "score": 2.2735720599737723
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "关键词命中",
+              "score": 1.3391447941077275
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "哈希连接的过程",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-087be07345e1c3",
+          "expected_start_ms": 72880,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 44190,
+              "end_ms": 85960,
+              "reason": "关键词命中",
+              "score": 2.574276504503978
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "进程和线程的区别",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 7030,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 4000,
+              "end_ms": 47780,
+              "reason": "关键词命中",
+              "score": 2.0731270356256455
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "关键词命中",
+              "score": 1.439798722353252
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "关键词命中",
+              "score": 0.8587862031613676
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "死锁的四个条件",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 126520,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "关键词命中",
+              "score": 2.562037864410303
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "关键词命中",
+              "score": 1.5188327662185381
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "页面置换的 LRU 算法",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b3700d81d281ba",
+          "expected_start_ms": 64410,
+          "top3": [
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 43140,
+              "end_ms": 85250,
+              "reason": "关键词命中",
+              "score": 3.2224345698148857
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "转账时一半成功一半失败怎么办",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 8220,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "关键词命中",
+              "score": 2.7139486862542794
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "数据库怎么避免读到别人还没提交的数据",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 109760,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词命中",
+              "score": 1.4906151200088469
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 115510,
+              "end_ms": 157650,
+              "reason": "关键词命中",
+              "score": 1.4622438340831758
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "关键词命中",
+              "score": 1.1012005755302436
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "为什么二叉搜索树不适合做磁盘索引",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 59030,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 43000,
+              "end_ms": 84090,
+              "reason": "关键词命中",
+              "score": 3.284256776604427
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 120120,
+              "end_ms": 163420,
+              "reason": "关键词命中",
+              "score": 0.6995798476791035
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "多线程同时改一个变量为什么会出错",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 106440,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "关键词命中",
+              "score": 1.7124410878904348
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "内存不够时操作系统怎么腾地方",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b3700d81d281ba",
+          "expected_start_ms": 55460,
+          "top3": [
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 80780,
+              "end_ms": 121700,
+              "reason": "关键词命中",
+              "score": 0.9777937833027771
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 43140,
+              "end_ms": 85250,
+              "reason": "关键词命中",
+              "score": 0.8128646444640695
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 4000,
+              "end_ms": 47780,
+              "reason": "关键词命中",
+              "score": 0.6032622226982003
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "红烧肉怎么做好吃",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": []
+        },
+        {
+          "query": "量子纠缠的物理原理",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": []
+        },
+        {
+          "query": "如何申请出国留学签证",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": []
+        }
+      ]
+    },
+    "semantic": {
+      "answered_queries": 17,
+      "hit_at_3": 16,
+      "hit_at_3_rate": 0.9412,
+      "no_answer_queries": 3,
+      "no_answer_refused": 3,
+      "no_answer_rate": 1.0,
+      "latency_ms_mean": 210.7,
+      "latency_ms_p95": 243.1,
+      "latency_ms_max": 275.9,
+      "rows": [
+        {
+          "query": "事务的原子性靠什么实现",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 55520,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 191700,
+              "end_ms": 211720,
+              "reason": "语义召回",
+              "score": 0.636439467007015
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 43030,
+              "end_ms": 85170,
+              "reason": "语义召回",
+              "score": 0.6049152432407391
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "语义召回",
+              "score": 0.5262830100571233
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "脏读是什么",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 109760,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 115510,
+              "end_ms": 157650,
+              "reason": "语义召回",
+              "score": 0.5794477462768555
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 80530,
+              "end_ms": 121170,
+              "reason": "语义召回",
+              "score": 0.4156809251688838
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.35569751262664795
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "间隙锁的作用",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 167030,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.5878081321716309
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "语义召回",
+              "score": 0.47155115008354187
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "语义召回",
+              "score": 0.43055388745344425
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "为什么数据库使用 B+ 树",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 30680,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "语义召回",
+              "score": 0.6743444994482708
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 43000,
+              "end_ms": 84090,
+              "reason": "语义召回",
+              "score": 0.6262810079716479
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 191700,
+              "end_ms": 211720,
+              "reason": "语义召回",
+              "score": 0.4989750089094107
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "什么是回表",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 89590,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "语义召回",
+              "score": 0.5658705234527588
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "语义召回",
+              "score": 0.5357583441878362
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 44190,
+              "end_ms": 85960,
+              "reason": "语义召回",
+              "score": 0.4918326735496521
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "最左前缀原则",
+          "no_answer": false,
+          "hit_at_3": false,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 99700,
+          "top3": [],
+          "warnings": [
+            "无答案判定：最高语义相似度 0.432 低于阈值 0.49，返回空集"
+          ]
+        },
+        {
+          "query": "索引失效的常见原因",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 120120,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 120120,
+              "end_ms": 163420,
+              "reason": "语义召回",
+              "score": 0.5917500391453445
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 158780,
+              "end_ms": 174240,
+              "reason": "语义召回",
+              "score": 0.5593173099784903
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "语义召回",
+              "score": 0.5428646155757209
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "如何查看执行计划",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-087be07345e1c3",
+          "expected_start_ms": 34730,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 4000,
+              "end_ms": 48830,
+              "reason": "语义召回",
+              "score": 0.6654030084609985
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 44190,
+              "end_ms": 85960,
+              "reason": "语义召回",
+              "score": 0.5598874688148499
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "语义召回",
+              "score": 0.5397655642172368
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "哈希连接的过程",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-087be07345e1c3",
+          "expected_start_ms": 72880,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 44190,
+              "end_ms": 85960,
+              "reason": "语义召回",
+              "score": 0.5157070755958557
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.40794646739959717
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "语义召回",
+              "score": 0.39158276369674494
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "进程和线程的区别",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 7030,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 4000,
+              "end_ms": 47780,
+              "reason": "语义召回",
+              "score": 0.762204471160069
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "语义召回",
+              "score": 0.6122764811186261
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 80780,
+              "end_ms": 121700,
+              "reason": "语义召回",
+              "score": 0.5024099946022034
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "死锁的四个条件",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 126520,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "语义召回",
+              "score": 0.6577575614741418
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.5234876247063168
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "语义召回",
+              "score": 0.4521814968261435
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "页面置换的 LRU 算法",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b3700d81d281ba",
+          "expected_start_ms": 64410,
+          "top3": [
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 43140,
+              "end_ms": 85250,
+              "reason": "语义召回",
+              "score": 0.6001617073627216
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 4000,
+              "end_ms": 46590,
+              "reason": "语义召回",
+              "score": 0.5149633848754442
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 80780,
+              "end_ms": 121700,
+              "reason": "语义召回",
+              "score": 0.5149564129166148
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "转账时一半成功一半失败怎么办",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 8220,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "语义召回",
+              "score": 0.5358323688806838
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "语义召回",
+              "score": 0.43381802431022765
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "语义召回",
+              "score": 0.4337986269477303
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "数据库怎么避免读到别人还没提交的数据",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 109760,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.578072147907977
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 80530,
+              "end_ms": 121170,
+              "reason": "语义召回",
+              "score": 0.5560079315893773
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 82000,
+              "end_ms": 124420,
+              "reason": "语义召回",
+              "score": 0.5453761978559556
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "为什么二叉搜索树不适合做磁盘索引",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 59030,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 43000,
+              "end_ms": 84090,
+              "reason": "语义召回",
+              "score": 0.7053943382753519
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "语义召回",
+              "score": 0.6472997700035995
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 120120,
+              "end_ms": 163420,
+              "reason": "语义召回",
+              "score": 0.5978530768418782
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "多线程同时改一个变量为什么会出错",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 106440,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "语义召回",
+              "score": 0.5668778935816455
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "语义召回",
+              "score": 0.5359270253224964
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 4000,
+              "end_ms": 47780,
+              "reason": "语义召回",
+              "score": 0.5189809844448677
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "内存不够时操作系统怎么腾地方",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b3700d81d281ba",
+          "expected_start_ms": 55460,
+          "top3": [
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 117910,
+              "end_ms": 145010,
+              "reason": "语义召回",
+              "score": 0.6240042037965122
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 43140,
+              "end_ms": 85250,
+              "reason": "语义召回",
+              "score": 0.6161364958164317
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 80780,
+              "end_ms": 121700,
+              "reason": "语义召回",
+              "score": 0.5670371224593261
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "红烧肉怎么做好吃",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": [
+            "无答案判定：最高语义相似度 0.282 低于阈值 0.49，返回空集"
+          ]
+        },
+        {
+          "query": "量子纠缠的物理原理",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": [
+            "无答案判定：最高语义相似度 0.465 低于阈值 0.49，返回空集"
+          ]
+        },
+        {
+          "query": "如何申请出国留学签证",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": [
+            "无答案判定：最高语义相似度 0.369 低于阈值 0.49，返回空集"
+          ]
+        }
+      ]
+    },
+    "hybrid": {
+      "answered_queries": 17,
+      "hit_at_3": 17,
+      "hit_at_3_rate": 1.0,
+      "no_answer_queries": 3,
+      "no_answer_refused": 3,
+      "no_answer_rate": 1.0,
+      "latency_ms_mean": 347.0,
+      "latency_ms_p95": 472.0,
+      "latency_ms_max": 592.2,
+      "rows": [
+        {
+          "query": "事务的原子性靠什么实现",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 55520,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 43030,
+              "end_ms": 85170,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03252247488101534
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 191700,
+              "end_ms": 211720,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03252247488101534
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03149801587301587
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "脏读是什么",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 109760,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 115510,
+              "end_ms": 157650,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 80530,
+              "end_ms": 121170,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03225806451612903
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "间隙锁的作用",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 167030,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "为什么数据库使用 B+ 树",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 30680,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03128054740957967
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03055037313432836
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "什么是回表",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 89590,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03252247488101534
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.032266458495966696
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 82000,
+              "end_ms": 124420,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.031754032258064516
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "最左前缀原则",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 99700,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 82000,
+              "end_ms": 124420,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 191700,
+              "end_ms": 211720,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "索引失效的常见原因",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 120120,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 120120,
+              "end_ms": 163420,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03252247488101534
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 80640,
+              "end_ms": 123910,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.032266458495966696
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03149801587301587
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "如何查看执行计划",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-087be07345e1c3",
+          "expected_start_ms": 34730,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 4000,
+              "end_ms": 48830,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03200204813108039
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 44190,
+              "end_ms": 85960,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "哈希连接的过程",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-087be07345e1c3",
+          "expected_start_ms": 72880,
+          "top3": [
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 44190,
+              "end_ms": 85960,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            },
+            {
+              "video_id": "v-087be07345e1c3",
+              "start_ms": 121480,
+              "end_ms": 146710,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "进程和线程的区别",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 7030,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 4000,
+              "end_ms": 47780,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03225806451612903
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.031024531024531024
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "死锁的四个条件",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 126520,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 123150,
+              "end_ms": 155150,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03200204813108039
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "页面置换的 LRU 算法",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b3700d81d281ba",
+          "expected_start_ms": 64410,
+          "top3": [
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 43140,
+              "end_ms": 85250,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 4000,
+              "end_ms": 46590,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 80780,
+              "end_ms": 121700,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "转账时一半成功一半失败怎么办",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 8220,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 4000,
+              "end_ms": 46990,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "数据库怎么避免读到别人还没提交的数据",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b25bde2a614d99",
+          "expected_start_ms": 109760,
+          "top3": [
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 153010,
+              "end_ms": 196340,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-b25bde2a614d99",
+              "start_ms": 115510,
+              "end_ms": 157650,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.031054405392392875
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.030776515151515152
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "为什么二叉搜索树不适合做磁盘索引",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-6c5deff11b3296",
+          "expected_start_ms": 59030,
+          "top3": [
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 43000,
+              "end_ms": 84090,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03278688524590164
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 120120,
+              "end_ms": 163420,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03200204813108039
+            },
+            {
+              "video_id": "v-6c5deff11b3296",
+              "start_ms": 4000,
+              "end_ms": 47300,
+              "reason": "语义召回",
+              "score": 0.016129032258064516
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "多线程同时改一个变量为什么会出错",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-5fba3cb5fd54de",
+          "expected_start_ms": 106440,
+          "top3": [
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 84150,
+              "end_ms": 126260,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03252247488101534
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "语义召回",
+              "score": 0.01639344262295082
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 4000,
+              "end_ms": 47780,
+              "reason": "语义召回",
+              "score": 0.015873015873015872
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "内存不够时操作系统怎么腾地方",
+          "no_answer": false,
+          "hit_at_3": true,
+          "expected_video_id": "v-b3700d81d281ba",
+          "expected_start_ms": 55460,
+          "top3": [
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 80780,
+              "end_ms": 121700,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.032266458495966696
+            },
+            {
+              "video_id": "v-b3700d81d281ba",
+              "start_ms": 43140,
+              "end_ms": 85250,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03225806451612903
+            },
+            {
+              "video_id": "v-5fba3cb5fd54de",
+              "start_ms": 43990,
+              "end_ms": 87260,
+              "reason": "关键词 + 语义共同命中",
+              "score": 0.03125
+            }
+          ],
+          "warnings": []
+        },
+        {
+          "query": "红烧肉怎么做好吃",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": [
+            "无答案判定：最高语义相似度 0.282 低于阈值 0.49，返回空集"
+          ]
+        },
+        {
+          "query": "量子纠缠的物理原理",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": [
+            "无答案判定：最高语义相似度 0.465 低于阈值 0.49，返回空集"
+          ]
+        },
+        {
+          "query": "如何申请出国留学签证",
+          "no_answer": true,
+          "refused": true,
+          "hit_count": 0,
+          "warnings": [
+            "无答案判定：最高语义相似度 0.369 低于阈值 0.49，返回空集"
+          ]
+        }
+      ]
+    }
+  }
+}
