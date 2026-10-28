@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
+import type { Theme } from "../components/AppShell";
 import type { Fixture, Health } from "../lib/types";
 
 interface SettingsPageProps {
   demo: boolean;
   health: Health | null;
   fixture: Fixture | null;
+  theme: Theme;
+  onThemeChange: (theme: Theme) => void;
 }
 
 interface MetricMode {
@@ -29,7 +32,7 @@ const MODE_NAMES: Record<string, string> = {
   hybrid: "混合（RRF）",
 };
 
-export default function SettingsPage({ demo, health, fixture }: SettingsPageProps) {
+export default function SettingsPage({ demo, health, fixture, theme, onThemeChange }: SettingsPageProps) {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [metricsError, setMetricsError] = useState<string | null>(null);
 
@@ -62,7 +65,26 @@ export default function SettingsPage({ demo, health, fixture }: SettingsPageProp
 
   return (
     <div>
-      <div className="stats-row">
+      <div className="card">
+        <div className="section-title" style={{ marginTop: 0 }}>外观</div>
+        <div className="field" style={{ maxWidth: 260 }}>
+          <label htmlFor="theme">颜色模式</label>
+          <select
+            id="theme"
+            value={theme}
+            onChange={(event) => onThemeChange(event.target.value as Theme)}
+          >
+            <option value="auto">跟随系统</option>
+            <option value="light">浅色</option>
+            <option value="dark">深色</option>
+          </select>
+        </div>
+        <div className="small muted" style={{ marginTop: 8 }}>
+          图标轨底部的日月按钮可快速切换；布局、字号与层级不随主题变化。
+        </div>
+      </div>
+
+      <div className="stats-row" style={{ marginTop: 14 }}>
         <div className="stat"><div className="n">{health?.course_count ?? 0}</div><div className="l">课程</div></div>
         <div className="stat"><div className="n">{health?.video_count ?? 0}</div><div className="l">讲次</div></div>
         <div className="stat"><div className="n">{health?.cue_count ?? 0}</div><div className="l">字幕行</div></div>
@@ -175,6 +197,7 @@ export default function SettingsPage({ demo, health, fixture }: SettingsPageProp
           <li>本地视频使用浏览器临时 URL，不上传、不托管，关闭页面后需重新选择。</li>
           <li>复习清单为相关度 + 覆盖贪心并合并区间，未实现 MMR，不宣称 MMR。</li>
           <li>无答案查询依赖语义阈值门禁，仍可能把弱相关片段判为有答案。</li>
+          <li>界面布局参考 FlowOSS（app.flowoss.com）逆向规格：图标轨 + 上下文侧栏 + 标签栏 + 状态栏；来源记录见 THIRD_PARTY_NOTICES.md。</li>
           <li>界面设计参考 VideoNote（Apache-2.0）与 BiliNote（MIT），来源与修改记录见 THIRD_PARTY_NOTICES.md。</li>
         </ul>
       </div>

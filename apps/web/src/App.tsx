@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import AppShell, { type PageKey } from "./components/AppShell";
+import { useCallback, useEffect, useRef, useState } from "react";
+import AppShell, { type PageKey, type Theme } from "./components/AppShell";
 import { api, errorText, isDemoMode } from "./lib/api";
 import { demoCourses, demoHealth, demoVideos, loadFixture } from "./lib/demo";
 import type { Course, Fixture, Health, Video } from "./lib/types";
@@ -9,10 +9,30 @@ import ReviewPage from "./pages/ReviewPage";
 import SearchPage from "./pages/SearchPage";
 import SettingsPage from "./pages/SettingsPage";
 
+const PAGE_TITLES: Record<PageKey, { title: string; sub: string }> = {
+  search: { title: "搜索", sub: "" },
+  library: {
+    title: "我的库",
+    sub: "课程与讲次 · 封面即卡片",
+  },
+  review: {
+    title: "复习清单",
+    sub: "输入考点与时间预算，生成带理由的片段清单",
+  },
+  import: {
+    title: "导入",
+    sub: "B 站链接或 SRT / VTT，写入真实 seekdb",
+  },
+  settings: {
+    title: "设置",
+    sub: "外观、运行状态、能力矩阵与检索评测",
+  },
+};
+
 export default function App() {
   const demo = isDemoMode();
   const [page, setPage] = useState<PageKey>("search");
-  const [collapsed, setCollapsed] = useState(false);
+  const [tabs, setTabs] = useState<PageKey[]>(["search"]);
   const [health, setHealth] = useState<Health | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
   const [videos, setVideos] = useState<Video[]>([]);
@@ -20,6 +40,15 @@ export default function App() {
   const [bootError, setBootError] = useState<string | null>(null);
   const [booting, setBooting] = useState(true);
   const [query, setQuery] = useState("");
+  const [searchCourseId, setSearchCourseId] = useState("");
+  const [libCourseId, setLibCourseId] = useState("");
+  const [activeVideo, setActiveVideo] = useState<Video | null>(null);
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = window.localStorage.getItem("tj-theme");
+    return saved === "light" || saved === "dark" || saved === "auto" ? saved : "auto";
+  });
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const searchFocusRef = useRef<HTMLInputElement | null>(null);
 
   const refresh = useCallback(async () => {
     try {
@@ -51,48 +80,67 @@ export default function App() {
     void refresh();
   }, [refresh]);
 
-  const handleSearch = (next: string) => {
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => {
+      const dark = theme === "dark" || (theme === "auto" && mq.matches);
+      document.documentElement.classList.toggle("dark", dark);
+      setResolvedTheme(dark ? "dark" : "light");
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, [theme]);
+
+  useEffect(() => {
+    window.localStorage.setItem("tj-theme", theme);
+  }, [theme]);
+
+  const navigate = useCallback((next: PageKey) => {
+    setPage(next);
+    setTabs((open) => (open.includes(next) ? open : [...open, next]));
+  }, []);
+
+  const closeTab = useCallback(
+    (target: PageKey) => {
+      if (tabs.length <= 1) return;
+      const index = tabs.indexOf(target);
+      const next = tabs.filter((item) => item !== target);
+      setTabs(next);
+      if (page === target) setPage(next[Math.max(0, index - 1)] ?? next[0]);
+    },
+    [tabs, page],
+  );
+
+  const handleSearch = useCallback((next: string) => {
     setQuery(next.trim());
     setPage("search");
-  };
+    setTabs((open) => (open.includes("search") ? open : [...open, "search"]));
+  }, []);
 
-  const titles: Record<PageKey, { title: string; sub: string }> = {
-    search: {
-      title: "搜索",
-      sub: `${courses.length} 门课 · ${videos.length} 讲 · ${health?.passage_count ?? 0} 个可检索片段`,
-    },
-    library: {
-      title: "我的库",
-      sub: `${health?.cue_count ?? 0} 条原始字幕 · ${health?.embedded_passage_count ?? 0} 个片段已生成向量`,
-    },
-    review: {
-      title: "复习清单",
-      sub: "输入考点与时间预算，生成带理由的片段清单",
-    },
-    import: {
-      title: "导入",
-      sub: "B 站链接或 SRT / VTT，写入真实 seekdb",
-    },
-    settings: {
-      title: "设置",
-      sub: "运行状态、能力矩阵与检索评测",
-    },
-  };
+  const head = PAGE_TITLES[page];
 
   return (
     <AppShell
       page={page}
-      onNavigate={setPage}
-      collapsed={collapsed}
-      onToggle={() => setCollapsed((value) => !value)}
+      onNavigate={navigate}
+      openTabs={tabs}
+      onCloseTab={closeTab}
       health={health}
-      courses={courses.length}
-      videos={videos.length}
-      title={titles[page].title}
-      subtitle={titles[page].sub}
+      courses={courses}
+      videos={videos}
       query={query}
-      onQueryChange={setQuery}
       onSearch={handleSearch}
+      searchFocusRef={searchFocusRef}
+      searchCourseId={searchCourseId}
+      onSearchCourseId={setSearchCourseId}
+      activeVideo={activeVideo}
+      onActiveVideo={setActiveVideo}
+      libCourseId={libCourseId}
+      onLibCourseId={setLibCourseId}
+      theme={theme}
+      resolvedTheme={resolvedTheme}
+      onThemeChange={setTheme}
     >
       {booting && (
         <div className="empty">
@@ -112,6 +160,13 @@ export default function App() {
         </div>
       )}
 
+      {page !== "search" && head.sub && (
+        <div className="page-head">
+          <h1>{head.title}</h1>
+          <span className="page-sub">{head.sub}</span>
+        </div>
+      )}
+
       {page === "search" && (
         <SearchPage
           demo={demo}
@@ -121,17 +176,34 @@ export default function App() {
           fixture={fixture}
           query={query}
           onSearch={handleSearch}
+          courseId={searchCourseId}
+          onCourseId={setSearchCourseId}
+          activeVideo={activeVideo}
+          onActiveVideo={setActiveVideo}
         />
       )}
       {page === "library" && (
-        <LibraryPage demo={demo} courses={courses} videos={videos} fixture={fixture} />
+        <LibraryPage
+          demo={demo}
+          courses={courses}
+          videos={videos}
+          fixture={fixture}
+          libCourseId={libCourseId}
+          onLibCourseId={setLibCourseId}
+        />
       )}
       {page === "review" && <ReviewPage demo={demo} />}
       {page === "import" && (
         <ImportPage demo={demo} courses={courses} onImported={refresh} />
       )}
       {page === "settings" && (
-        <SettingsPage demo={demo} health={health} fixture={fixture} />
+        <SettingsPage
+          demo={demo}
+          health={health}
+          fixture={fixture}
+          theme={theme}
+          onThemeChange={setTheme}
+        />
       )}
     </AppShell>
   );

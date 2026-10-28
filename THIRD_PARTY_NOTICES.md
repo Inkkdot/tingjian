@@ -42,6 +42,9 @@
 
 以下项目仅作为交互/流程设计参考，未复制源码：
 
+- FlowOSS（`app.flowoss.com`）：界面布局参考（图标轨 + 上下文侧栏 + 标签栏 + 状态栏、
+  「封面即卡片」网格、角色化颜色令牌与明暗双主题）。依据公开页面的 DOM 实测规格
+  （`FLOWOSS_UI_SPEC.md`）自行实现，未复制其源码、图标或素材；配色与圆角按本项目品牌调整。
 - BiliNote（浏览器侧字幕与时间戳交互）：<https://github.com/AliceDel66/BiliNote>
 - BiliNote（AI 笔记工作流）：<https://github.com/JefferyHcool/BiliNote>
 - seekdb 文档与示例：<https://github.com/oceanbase/seekdb>
