@@ -26,13 +26,27 @@ interface SearchPageProps {
   fixture: Fixture | null;
   query: string;
   onSearch: (query: string) => void;
+  courseId: string;
+  onCourseId: (courseId: string) => void;
+  activeVideo: Video | null;
+  onActiveVideo: (video: Video | null) => void;
 }
 
 function capLabel(capability: string): string {
+  if (capability === "embed_seek") return "B 站内嵌播放（秒级定位）";
   if (capability === "external_seek") return "外链跳转（尽量定位）";
   if (capability === "local_select") return "本地视频精确跳转";
   if (capability === "url_hint") return "链接提示";
   return "无播放能力信息";
+}
+
+function bilibiliEmbedUrl(video: Video, startMs: number): string {
+  const t = Math.max(0, startMs + (video.offset_ms || 0)) / 1000;
+  const page = Math.max(1, video.part_index || 1);
+  return (
+    `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(video.platform_video_id)}` +
+    `&page=${page}&autoplay=0&high_quality=1&danmaku=0&t=${Math.floor(t)}`
+  );
 }
 
 function highlight(text: string, query: string): ReactNode {
@@ -49,20 +63,22 @@ function highlight(text: string, query: string): ReactNode {
 }
 
 export default function SearchPage(props: SearchPageProps) {
-  const { demo, health, courses, videos, fixture, query, onSearch } = props;
+  const {
+    demo, health, courses, videos, fixture, query, onSearch,
+    courseId, onCourseId, activeVideo, onActiveVideo,
+  } = props;
   const [draft, setDraft] = useState(query);
   const [mode, setMode] = useState<SearchMode>("hybrid");
-  const [courseId, setCourseId] = useState("");
   const [resp, setResp] = useState<SearchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<SearchHit | null>(null);
-  const [activeVideo, setActiveVideo] = useState<Video | null>(null);
   const [cues, setCues] = useState<Cue[]>([]);
   const [cuesLoading, setCuesLoading] = useState(false);
   const [cueFilter, setCueFilter] = useState("");
   const [cueFocus, setCueFocus] = useState<number | null>(null);
   const [localUrl, setLocalUrl] = useState<string | null>(null);
+  const [embedSeek, setEmbedSeek] = useState<{ videoId: string; ms: number } | null>(null);
   const [playhead, setPlayhead] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -193,25 +209,29 @@ export default function SearchPage(props: SearchPageProps) {
     return needle ? cues.filter((cue) => cue.text.includes(needle)) : cues;
   }, [cues, cueFilter]);
 
-  const railVideos = courseId ? videos.filter((video) => video.course_id === courseId) : videos;
   const hits = resp?.hits ?? [];
   const selectedCueSeq = localUrl && playhead > 0 ? playheadSeq : focusSeq;
   const externalUrl = selected?.jump_url || activeVideo?.source_url || "";
+  const embeddable =
+    activeVideo != null &&
+    activeVideo.platform === "bilibili" &&
+    !!activeVideo.platform_video_id;
+  const embedMs =
+    embedSeek && activeVideo && embedSeek.videoId === activeVideo.id ? embedSeek.ms : 0;
+  const embedSrc = activeVideo ? bilibiliEmbedUrl(activeVideo, embedMs) : "";
 
   function chooseHit(hit: SearchHit) {
     setSelected(hit);
     setCueFocus(hit.cue_start_seq);
-    setActiveVideo(videos.find((video) => video.id === hit.video_id) ?? null);
-  }
-
-  function chooseVideo(video: Video) {
-    setSelected(null);
-    setCueFocus(null);
-    setActiveVideo(video);
+    setEmbedSeek({ videoId: hit.video_id, ms: hit.start_ms });
+    onActiveVideo(videos.find((video) => video.id === hit.video_id) ?? null);
   }
 
   function chooseCue(cue: Cue) {
     setCueFocus(cue.seq);
+    if (embeddable && activeVideo) {
+      setEmbedSeek({ videoId: activeVideo.id, ms: cue.start_ms });
+    }
     const element = videoRef.current;
     if (localUrl && element) {
       element.currentTime = Math.max(0, cue.start_ms + (activeVideo?.offset_ms ?? 0)) / 1000;
@@ -228,52 +248,6 @@ export default function SearchPage(props: SearchPageProps) {
 
   return (
     <div className={`workspace${activeVideo ? "" : " no-inspector"}`}>
-      <aside className="rail" aria-label="筛选与讲次">
-        <div className="rail-head">
-          <span className="rail-title">课程</span>
-          <span className="filter-count">{courses.length}</span>
-        </div>
-        <button
-          className={`filter-item${courseId === "" ? " active" : ""}`}
-          onClick={() => setCourseId("")}
-        >
-          <span>全部课程</span>
-          <span className="filter-count">{videos.length} 讲</span>
-        </button>
-        {courses.map((course) => (
-          <button
-            key={course.id}
-            className={`filter-item${courseId === course.id ? " active" : ""}`}
-            onClick={() => setCourseId(course.id)}
-            title={`${course.name} ${course.term}`}
-          >
-            <span>{course.name}</span>
-            <span className="filter-count">{course.video_count}</span>
-          </button>
-        ))}
-        <div className="rail-section">
-          <div className="rail-head">
-            <span className="rail-title">讲次</span>
-            <span className="filter-count">{railVideos.length}</span>
-          </div>
-          {railVideos.map((video) => (
-            <button
-              key={video.id}
-              className={`video-mini${activeVideo?.id === video.id ? " active" : ""}`}
-              onClick={() => chooseVideo(video)}
-              title={video.title}
-            >
-              <div className="t">{video.title}</div>
-              <div className="m">
-                {video.cue_count} 句 · {video.passage_count} 片段
-                {video.embedded_count > 0 ? " · 向量" : ""}
-              </div>
-            </button>
-          ))}
-          {railVideos.length === 0 && <div className="small muted" style={{ padding: 8 }}>暂无讲次</div>}
-        </div>
-      </aside>
-
       <section className="panel main-panel">
         {intro ? (
           <div className="search-hero">
@@ -297,7 +271,7 @@ export default function SearchPage(props: SearchPageProps) {
                 placeholder="例如：为什么数据库索引使用 B+ 树而不是二叉树？"
                 aria-label="搜索课程字幕"
               />
-              <button className="btn primary" type="submit">检索</button>
+              <button className="btn solid" type="submit">检索</button>
             </form>
             <div className="chips" style={{ marginTop: 12 }}>
               {EXAMPLES.map((example) => (
@@ -434,7 +408,7 @@ export default function SearchPage(props: SearchPageProps) {
               className="btn ghost sm"
               aria-label="关闭检查器"
               onClick={() => {
-                setActiveVideo(null);
+                onActiveVideo(null);
                 setSelected(null);
                 setCueFocus(null);
               }}
@@ -443,7 +417,28 @@ export default function SearchPage(props: SearchPageProps) {
             </button>
           </div>
 
-          {localUrl ? (
+          {embeddable && !localUrl ? (
+            <div>
+              <div className="player-wrap">
+                <iframe
+                  key={`${activeVideo.id}:${Math.floor(embedMs / 1000)}`}
+                  src={embedSrc}
+                  title="Bilibili 嵌入播放器"
+                  allowFullScreen
+                  scrolling="no"
+                />
+              </div>
+              <div className="result-meta" style={{ marginTop: 6 }}>
+                <span>B 站内嵌播放{embedMs > 0 ? ` · 已定位 ${fmtTime(embedMs)}` : ""}</span>
+                {externalUrl && (
+                  <a href={externalUrl} target="_blank" rel="noreferrer">打开原视频</a>
+                )}
+                <button className="btn ghost sm" onClick={() => fileRef.current?.click()}>
+                  <Upload size={14} /> 本地文件毫秒级对齐
+                </button>
+              </div>
+            </div>
+          ) : localUrl ? (
             <div>
               <div className="player-wrap">
                 <video
@@ -492,9 +487,11 @@ export default function SearchPage(props: SearchPageProps) {
                 命中片段 {fmtTime(selected.start_ms)}–{fmtTime(selected.end_ms)} · {capLabel(selected.playback_capability)}
               </div>
               <div className="small">
-                {selected.playback_capability === "external_seek"
-                  ? "外部平台只能通过链接打开并尽量定位，iframe 内不保证精确 seek。"
-                  : "选择本地视频后，将按字幕时间戳精确跳转。"}
+                {selected.playback_capability === "embed_seek"
+                  ? "点击结果或字幕行时，右侧内嵌播放器会按字幕时间戳重新定位（秒级）。"
+                  : selected.playback_capability === "external_seek"
+                    ? "外部平台只能通过链接打开并尽量定位，iframe 内不保证精确 seek。"
+                    : "选择本地视频后，将按字幕时间戳精确跳转。"}
               </div>
               {selected.jump_url && (
                 <a href={selected.jump_url} target="_blank" rel="noreferrer">

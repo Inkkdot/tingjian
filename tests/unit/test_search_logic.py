@@ -31,7 +31,16 @@ def test_clamp_and_bilibili_jump():
         offset_ms=1_000,
     )
     assert url == "https://www.bilibili.com/video/BV1xx411c7mD?p=2&t=755"
-    assert capability == "external_seek"
+    assert capability == "embed_seek"
+
+
+def test_bilibili_embed_url_carries_seek():
+    from playback import bilibili_embed_url
+
+    assert bilibili_embed_url("BV1xx411c7mD", 2, 754_000, 1_000) == (
+        "https://player.bilibili.com/player.html?bvid=BV1xx411c7mD&page=2"
+        "&autoplay=0&high_quality=1&danmaku=0&t=755"
+    )
 
 
 def test_youtube_direct_and_local_capabilities():

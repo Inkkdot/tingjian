@@ -78,6 +78,7 @@ def _ingest(store, *, video_seed="srt-e2e-01", embeddings=None):
         platform_video_id=video_seed,
         part_index=1,
         cid=None,
+        cover_url="",
         subtitle_kind="uploaded_srt",
         duration_ms=parsed.cues[-1].end_ms,
         offset_ms=0,

@@ -101,7 +101,7 @@ export function demoSearch(
         text: passage.text,
         source_url: video.source_url,
         jump_url: video.source_url,
-        playback_capability: video.platform === "bilibili" ? "external_seek" : "local_select",
+        playback_capability: video.platform === "bilibili" ? "embed_seek" : "local_select",
         match_reason: "Demo 关键词过滤（非 seekdb 混合检索）",
         score,
       });

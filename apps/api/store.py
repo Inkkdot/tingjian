@@ -115,6 +115,7 @@ class Store:
                       platform_video_id VARCHAR(64) NOT NULL DEFAULT '',
                       part_index INT NOT NULL DEFAULT 1,
                       cid BIGINT NULL,
+                      cover_url VARCHAR(1024) NOT NULL DEFAULT '',
                       subtitle_kind VARCHAR(32) NOT NULL DEFAULT '',
                       duration_ms BIGINT NOT NULL DEFAULT 0,
                       offset_ms BIGINT NOT NULL DEFAULT 0,
@@ -128,6 +129,14 @@ class Store:
                     ) DEFAULT CHARSET=utf8mb4
                     """
                 )
+                try:
+                    # idempotent migration for databases created before cover_url existed
+                    cur.execute(
+                        "ALTER TABLE videos ADD COLUMN cover_url VARCHAR(1024) "
+                        "NOT NULL DEFAULT '' AFTER cid"
+                    )
+                except Exception:
+                    pass
                 cur.execute(
                     """
                     CREATE TABLE IF NOT EXISTS cues (
@@ -271,7 +280,7 @@ class Store:
         self.ensure_schema()
         sql = """
             SELECT v.id, v.course_id, v.title, v.source_url, v.source_type, v.platform,
-                   v.platform_video_id, v.part_index, v.cid, v.subtitle_kind,
+                   v.platform_video_id, v.part_index, v.cid, v.cover_url, v.subtitle_kind,
                    v.duration_ms, v.offset_ms, v.source_hash, v.language, v.index_version,
                    (SELECT COUNT(*) FROM cues q WHERE q.video_id = v.id) AS cue_count,
                    (SELECT COUNT(*) FROM passages p WHERE p.video_id = v.id) AS passage_count,
@@ -316,6 +325,7 @@ class Store:
         platform_video_id: str,
         part_index: int,
         cid: int | None,
+        cover_url: str,
         subtitle_kind: str,
         duration_ms: int,
         offset_ms: int,
@@ -377,20 +387,21 @@ class Store:
                 cur.execute(
                     """
                     INSERT INTO videos(id, course_id, title, source_url, source_type, platform,
-                      platform_video_id, part_index, cid, subtitle_kind, duration_ms, offset_ms,
+                      platform_video_id, part_index, cid, cover_url, subtitle_kind, duration_ms, offset_ms,
                       source_hash, language, index_version, created_at, updated_at)
-                    VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     ON DUPLICATE KEY UPDATE course_id=VALUES(course_id), title=VALUES(title),
                       source_url=VALUES(source_url), source_type=VALUES(source_type),
-                      cid=VALUES(cid), subtitle_kind=VALUES(subtitle_kind),
+                      cid=VALUES(cid), cover_url=VALUES(cover_url),
+                      subtitle_kind=VALUES(subtitle_kind),
                       duration_ms=VALUES(duration_ms), offset_ms=VALUES(offset_ms),
                       source_hash=VALUES(source_hash), language=VALUES(language),
                       index_version=VALUES(index_version), updated_at=VALUES(updated_at)
                     """,
                     (
                         primary_video_id, course_id, title, source_url, source_type, platform,
-                        platform_video_id, part_index, cid, subtitle_kind, duration_ms, offset_ms,
-                        source_hash, language, index_version, now, now,
+                        platform_video_id, part_index, cid, cover_url, subtitle_kind,
+                        duration_ms, offset_ms, source_hash, language, index_version, now, now,
                     ),
                 )
                 cur.execute("DELETE FROM passages WHERE video_id=%s", (primary_video_id,))
@@ -636,6 +647,7 @@ class Store:
                     "platform": v["platform"],
                     "platform_video_id": v["platform_video_id"],
                     "part_index": v["part_index"],
+                    "cover_url": v.get("cover_url") or "",
                     "duration_ms": v["duration_ms"],
                     "subtitle_kind": v["subtitle_kind"],
                     "cues": self.get_video_cues(v["id"]),

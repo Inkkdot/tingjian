@@ -214,6 +214,56 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 
 限制：登录态需重启服务生效；AI 字幕轨是否可用取决于视频；Cookie 过期后需重新配置。
 
+## 阶段六 · 前端按 FlowOSS UI 理念重构（2026-10-28）
+
+输入：用户提供的《听见：完整架构与 FlowOSS 参考资料v0.7》压缩包中的 UI 逆向规格
+（`FLOWOSS_UI_SPEC.md` + `flowoss-tokens.json`）。只采用其 UI 设计理念，不采用其中的
+后端策划与架构方案；不改动既有 API、数据流与功能。
+
+实现（全部位于 `apps/web/src`）：
+
+- `styles/design.css`：重写为角色化令牌（沿用 `--vm-*` 名称），M3 风格角色 + 暖色品牌值；
+  1px 边框层级、去阴影、圆角收敛到 8–10px；`html.dark` 双主题；10px 悬停显色滚动条。
+- `components/AppShell.tsx`：FlowOSS 外壳——48px 图标轨（2px 主色左指示线、底部主题与设置）、
+  240px 上下文侧栏（37px header、24px 条目、4px 可拖 sash，宽度记忆到 localStorage）、
+  36px 标签栏（bg primary/5、激活白底、可关闭多标签）、24px 状态栏（左模式/右计数）；
+  Ctrl+K 与 / 聚焦搜索；<1200px 折叠侧栏保主区。
+- `App.tsx`：多标签状态、颜色模式（跟随系统/浅色/深色，localStorage 持久化）、
+  搜索课程过滤与当前讲次提升为全局状态。
+- `pages/SearchPage.tsx`：筛选栏移入外壳侧栏，主区两列（结果 + 检查器）。
+- `pages/LibraryPage.tsx`：表格改「封面即卡片」网格——课程 3 层堆叠卡（6/12px 偏移、
+  hover 9/18px、16:9、200ms）与讲次卡（时长角标、4px 向量化进度条），
+  `repeat(auto-fill, minmax(180px, 1fr))`；封面为确定性渐变占位（无真实封面数据）。
+- `pages/SettingsPage.tsx`：新增「外观 / 颜色模式」。
+
+按 UI 规格的取舍：多讲标签页用「视图即标签页」替代（无多文档概念）；拖拽归档（dnd-kit）
+省略（无对应功能，避免引入依赖）；书封 3:4 改 16:9；Roboto 改 Noto Sans SC。
+
+验证（Demo 模式，1600×1000 与 1024×800 headless Edge 实测，截图 `artifacts/screenshots/07-13`）：
+
+- `npm run build` 通过（tsc + vite）。
+- 搜索：侧栏输入「B+ 树」→ 4 条结果 → 点击首条 → 检查器加载 40 句字幕联动。
+- 库：课程堆叠卡 + 5 张讲次卡渲染；点卡片展开字幕详情。
+- 暗色：图标轨切换后全站令牌换值，状态栏显示「深色」。
+- 响应式：1024 宽侧栏折叠、主区单列；控制台无报错。
+
+## 阶段七 · 外链 + 封面 + 字幕 + B 站嵌入播放一体化（2026-10-28）
+
+外链（source_url）、封面（pic/cover_url）、字幕与嵌入播放作为一条完整链路实现：
+
+- `apps/api/store.py`：videos 表新增 `cover_url` 列（CREATE TABLE + 旧库幂等 ALTER），入库、`list_videos`、`export_fixture` 全链路携带。
+- `apps/api/bilibili.py`：`BiliVideo.pic` 取自 view 接口 `pic` 字段，导入时随字幕一并入库；preview 返回 `pic`。
+- `apps/api/playback.py`：新增 `bilibili_embed_url`（player.bilibili.com/player.html，bvid/page/t 参数秒级定位）；B 站命中能力标签从 `external_seek` 升级为 `embed_seek`。
+- 前端：`Video.cover_url` 类型；检查器对 platform=bilibili 讲次渲染官方嵌入 iframe，点击结果/字幕行时按字幕时间戳重定位（key 触发重载）；本地文件毫秒级对齐保留为次要路径；库页封面卡片优先使用真实封面图（失败回退渐变）；导入页预览显示封面。
+- `scripts/build_demo_fixture.mjs`：从本地 B 站演示素材（manifest + 字幕 JSON + 封面，素材不入库不分发）生成 demo fixture，复刻 live 端 chunk_passages（20-45s/260 字）切块。演示素材版权归原视频作者及 Bilibili，仅用于站点演示。
+
+验证（Demo 模式，headless Edge 实测，截图 `artifacts/screenshots/14-16`）：
+
+- `python -m pytest tests/unit`：23 通过（含 `bilibili_embed_url` 新用例）；`npm run build` 通过。
+- 搜索「SQL」→ 10 条命中 → 点击首条 → 检查器渲染 player.bilibili.com 嵌入播放器，`t=1832` 与命中片段 30:32 对齐，字幕 960 句联动高亮。
+- 库页 6 张封面（2 课程堆叠 + 4 讲次）全部真实图片加载（naturalWidth > 0）。
+
+
 ## 证据索引
 
 | 证据 | 路径 |

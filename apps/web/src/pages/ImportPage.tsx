@@ -13,6 +13,7 @@ interface Preview {
   bvid?: string;
   title?: string;
   owner?: string;
+  pic?: string;
   duration_ms?: number;
   parts?: Array<{ page: number; title: string; duration_ms: number; cid: number }>;
   part_index?: number;
@@ -249,6 +250,20 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
             </div>
             {preview && (
               <div className="card" style={{ marginTop: 12, background: "var(--vm-surface-2)" }}>
+                {preview.pic && (
+                  <img
+                    src={preview.pic}
+                    alt="视频封面"
+                    referrerPolicy="no-referrer"
+                    style={{
+                      width: "100%", aspectRatio: "16 / 9", objectFit: "cover",
+                      borderRadius: "var(--vm-radius)", marginBottom: 10, display: "block",
+                    }}
+                    onError={(event) => {
+                      event.currentTarget.remove();
+                    }}
+                  />
+                )}
                 <dl className="kv">
                   <dt>标题</dt><dd>{preview.title}</dd>
                   <dt>UP 主</dt><dd>{preview.owner}</dd>
@@ -307,7 +322,7 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
             />
             {lines.length > 0 && (
               <div className="card" style={{ marginTop: 10, background: "var(--vm-surface-2)" }}>
-                <div className="rail-title" style={{ marginBottom: 6 }}>预览</div>
+                <div className="section-title" style={{ margin: "0 0 6px", fontSize: 13 }}>预览</div>
                 {lines.map((line, index) => (
                   <div className="small mono" key={index} style={{ padding: "2px 0" }}>{line}</div>
                 ))}

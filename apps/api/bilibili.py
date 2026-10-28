@@ -56,6 +56,7 @@ class BiliVideo:
     duration_ms: int
     parts: list[BiliPart] = field(default_factory=list)
     owner: str = ""
+    pic: str = ""
 
 
 @dataclass
@@ -212,6 +213,7 @@ class BilibiliClient:
             duration_ms=int(data.get("duration") or 0) * 1000,
             parts=parts,
             owner=str((data.get("owner") or {}).get("name") or ""),
+            pic=str(data.get("pic") or ""),
         )
 
     def fetch_subtitles(self, bvid: str, cid: int) -> list[SubtitleTrack]:

@@ -18,6 +18,7 @@ export interface Video {
   platform: string;
   platform_video_id: string;
   part_index: number;
+  cover_url?: string;
   duration_ms: number;
   offset_ms: number;
   subtitle_kind: string;
