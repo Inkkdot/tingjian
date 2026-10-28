@@ -248,14 +248,19 @@ Live 导入：`scripts/verify_m0.py` 通过 `POST /api/import/srt` 上传真实 
 
 | 材料 | 位置 |
 | --- | --- |
+| Qoder 完整开发会话 | 参赛仓库 `qoder/tingjian/artifacts/qoder-development/conversation-2026-10-28.md`（Qoder 桌面端会话全量导出，脱敏后 5.8 MB） |
 | Qoder 开发会话截图 | `artifacts/qoder-development/01-qoder-session.png`（Qoder 桌面端任务、工具调用与执行状态） |
 | 开发记录 | `DEVELOPMENT_LOG.md`：需求拆解、阶段实现、真实命令输出、缺陷与修复 |
 | 全量验收日志 | `artifacts/verify/`：db_probe、verify_m0、unit、integration、eval、web_build |
 | 评测明细 | `artifacts/metrics.json`（含失败样本） |
 | 账号 UID | `01a17e94-5842-7b39-86cd-7549fcae9edf` |
 
-UID 取自本机 Qoder Sites 发布记录的 `ownerUid`，并与账号头像 URL 中的用户 ID 一致；
-仅用于赛事身份核验，不含任何凭据。
+完整会话导出含赛事内部讨论与工作区路径，只随参赛仓库提供，不进入公开仓库；
+公开仓库以会话截图与 `DEVELOPMENT_LOG.md` 作为可核对依据。
+
+UID 取自本机 Qoder Sites 发布记录的 `ownerUid`（10 份发布记录取值一致），
+并与账号头像 URL `https://qoder.com.cn/users/01a17e94-5842-7b39-86cd-7549fcae9edf/default/avatars`
+中的用户 ID 相同；仅用于赛事身份核验，不含任何凭据。
 
 ## 6. 使用效果材料（题面可选项）
 
@@ -285,7 +290,7 @@ UID 取自本机 Qoder Sites 发布记录的 `ownerUid`，并与账号头像 URL
 | 完整运行说明：环境、依赖、seekdb 部署与接入 | 第 3 节 + `README.md` | 通过 |
 | 可执行验证样例：初始数据、输入、步骤、预期、证据 | 第 4 节 + `artifacts/verification-search.json`、`db-probe.json`、`m0-report.json` | 通过 |
 | 证明指定技术真实生效 | seekdb 版本、ik 全文、HNSW 向量、双索引、真实查询分数与候选数 | 通过 |
-| Qoder 为主要开发工具且可核对 | Qoder 会话截图、`DEVELOPMENT_LOG.md`、UID | 通过 |
+| Qoder 为主要开发工具且可核对 | Qoder 完整会话导出、会话截图、`DEVELOPMENT_LOG.md`、UID | 通过 |
 | 使用效果材料（可选） | 检索评测 + 站点访问统计（含覆盖说明） | 提交 |
 | 配置占位符、无敏感凭据、第三方署名 | 第 7 节 + `THIRD_PARTY_NOTICES.md` | 通过 |
 | 评审结束前不暂停/删除站点 | 站点持续在线 | 遵守 |
