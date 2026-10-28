@@ -182,6 +182,38 @@ bash scripts/verify.sh
 | 验证 | 编写并真实运行 M0、单元、集成、评测与构建脚本，保留日志 |
 | 交付 | 生成界面截图、打包静态站点、通过 Qoder Sites 发布并开放访问 |
 
+## 阶段五 · 登录态字幕轨（2026-10-28）
+
+背景：M0 记录匿名公开轨不可用。为确认登录态是否可用，用独立浏览器配置登录后实测。
+
+实测方法：独立 Edge 配置登录 B 站，通过 CDP 在页面内读取 Cookie 并只传给本机 Python 进程；
+Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何地址。
+
+| 请求 | 第 1 分 P（2318s） | 第 2 分 P（2883s） |
+| --- | --- | --- |
+| 匿名 `player/v2` | 0 条轨道 | — |
+| 登录态 `player/v2`（未签名） | 703 / 0 / 824 条，多次出现串台 | 75 / 235 / 259 条，均为其他视频 |
+| 登录态 `player/wbi/v2`（签名） | 703 条，3/3 一致，覆盖率 1.0 | 836 条，3/3 一致，覆盖率 1.0 |
+
+关键发现：HTTP 200 不等于内容正确。未签名接口会返回与目标视频无关的字幕轨；
+签名接口稳定，但客户端仍应在入库前校验时长覆盖率，避免静默污染语料。
+
+实现：
+
+- `apps/api/bilibili.py`：wbi 签名、可选 Cookie、签名接口优先、`validate_track` 覆盖率校验。
+- `apps/api/config.py`：`BILIBILI_COOKIE` / `BILIBILI_COOKIE_FILE`，字段 `repr=False`，不进入日志。
+- `apps/api/main.py`：导入与预览传入登录态，导入前校验，health 暴露 `bilibili_login`。
+- 前端：导入页与设置页区分“登录态已配置/未配置”，保留 SRT 回退文案。
+
+验证：
+
+- `pytest tests/unit`：22 passed（新增 wbi、回退、覆盖率校验、Cookie 隐藏用例）。
+- `npm run build`：通过。
+- 真实登录态：第 1/2 分 P 分别 703/836 条，覆盖率 1.0/0.999，首句匹配。
+- API 预览接口实测：`authenticated=true`、`track_available=true`、轨道 `ai-zh`。
+
+限制：登录态需重启服务生效；AI 字幕轨是否可用取决于视频；Cookie 过期后需重新配置。
+
 ## 证据索引
 
 | 证据 | 路径 |

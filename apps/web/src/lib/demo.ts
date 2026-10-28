@@ -31,6 +31,7 @@ export function demoHealth(fixture: Fixture): Health {
       vector_search: false,
       hybrid_search: false,
       bilibili_import: false,
+      bilibili_login: false,
       bilibili_browser_fallback: false,
       review_playlist: false,
       asr: false,

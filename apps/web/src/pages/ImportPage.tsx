@@ -18,7 +18,8 @@ interface Preview {
   part_index?: number;
   part_title?: string;
   subtitle_tracks?: Array<{ lan?: string; lan_doc?: string }>;
-  public_track_available?: boolean;
+  track_available?: boolean;
+  authenticated?: boolean;
   fallback_hint?: string;
 }
 
@@ -238,12 +239,13 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
               </button>
               <button className="btn primary" onClick={() => void doImportBilibili()} disabled={disabled || !url.trim()}>
                 {busy === "import" ? <Loader2 className="spin" size={15} /> : <UploadCloud size={15} />}
-                导入公开字幕轨
+                导入字幕轨
               </button>
             </div>
             <div className="notice" style={{ marginTop: 12 }}>
-              服务端只尝试「无需登录的公开字幕轨」，不会保存或传输 Cookie。若失败，
-              请用「视频字幕提取器 Pro」在浏览器导出 SRT，再到右侧上传。
+              未配置登录态时只读取匿名公开轨；在本机设置 BILIBILI_COOKIE 后可读取登录态字幕轨。
+              Cookie 仅由本机服务端读取并只发往 B 站，不写库、不返回前端。若仍失败，
+              请用「视频字幕提取器 Pro」导出 SRT 后上传。
             </div>
             {preview && (
               <div className="card" style={{ marginTop: 12, background: "var(--vm-surface-2)" }}>
@@ -252,9 +254,15 @@ export default function ImportPage({ demo, courses, onImported }: ImportPageProp
                   <dt>UP 主</dt><dd>{preview.owner}</dd>
                   <dt>BV / P</dt><dd className="mono">{preview.bvid} · P{preview.part_index}</dd>
                   <dt>分 P</dt><dd>{preview.parts?.length ?? 0} 个</dd>
-                  <dt>公开字幕轨</dt>
+                  <dt>登录态</dt>
                   <dd>
-                    {preview.public_track_available
+                    {preview.authenticated
+                      ? <span className="badge ok">已配置</span>
+                      : <span className="badge warn">未配置</span>}
+                  </dd>
+                  <dt>字幕轨</dt>
+                  <dd>
+                    {preview.track_available
                       ? <span className="badge ok">可用：{preview.subtitle_tracks?.map((track) => track.lan_doc || track.lan).join(" / ")}</span>
                       : <span className="badge warn">未发现</span>}
                   </dd>

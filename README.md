@@ -209,13 +209,19 @@ Demo 模式的所有结果页均有「离线样例」标识，不宣称语义检
 cd apps/web && npm run build:demo   # 产物 dist-demo/
 ```
 
-## B 站字幕的限制与兜底
+## B 站字幕：匿名公开轨、可选登录态与 SRT 兜底
 
-- 仅处理**公开字幕轨**，不向服务端传递任何 Cookie；代码中没有 Cookie 参数入口。
-- 当前环境 B 站公开轨接口返回需要登录，因此 `verify_m0.py` 记录
-  `bilibili_public_track_available = False`，M0 使用**用户导出的 SRT + source_url** 路径通过。
-- 导入页保留 B 站预览/导入入口，失败时返回可读错误，不伪造成功。
-- 推荐兜底：用浏览器用户脚本导出 SRT（登录态留在浏览器侧），再上传 SRT。
+- 默认只读取**匿名公开字幕轨**，不需要任何 Cookie。
+- 可选登录态：在本机设置 `BILIBILI_COOKIE`，或用 `BILIBILI_COOKIE_FILE` 指向仓库外的文件。
+  服务端通过 wbi 签名的 `/x/player/wbi/v2` 读取 AI 字幕轨；Cookie 不写库、不返回前端、不进日志。
+- 未签名的 `/x/player/v2` 实测会随机返回**别的视频的字幕**（同一视频曾出现 703 条正确轨与
+  173/230 条串台轨）。客户端固定优先签名接口，并在入库前按分 P 时长校验覆盖率；
+  明显不符时返回 `TRACK_MISMATCH`，不会静默写入错误语料。
+- 2026-10-28 本机登录态实测：`BV1pW411W7Do` 第 1/2 分 P 分别解析出 703/836 条 cue，
+  覆盖率 1.0/0.999，首句与课程内容一致。
+- 未配置登录态或视频没有字幕轨时，保留浏览器导出 SRT 后上传的回退路径。
+- `verify_m0.py` 仍以匿名模式运行并记录 `bilibili_public_track_available = False`；
+  M0 继续使用真实 SRT 完成。
 
 ## 已知限制
 

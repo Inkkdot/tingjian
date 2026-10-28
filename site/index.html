@@ -147,7 +147,7 @@
         <p>字幕、片段、向量与全文索引都在 seekdb 中；应用层不维护第二套检索状态，也不使用 SQLite / Mock 冒充数据库能力。</p>
       </div>
       <div class="flow" role="list" aria-label="数据流">
-        <div class="flow-step" role="listitem"><span>输入</span><strong>B 站公开字幕 / SRT / VTT</strong><small>公开轨不可用时，明确回退到浏览器字幕导出</small></div>
+        <div class="flow-step" role="listitem"><span>输入</span><strong>B 站字幕轨 / SRT / VTT</strong><small>匿名轨不可用时回退；可选本机登录态读取 AI 字幕</small></div>
         <div class="flow-arrow" aria-hidden="true">→</div>
         <div class="flow-step" role="listitem"><span>写入</span><strong>cue → passage → embedding</strong><small>幂等导入，保留 source_hash 与 index_version</small></div>
         <div class="flow-arrow" aria-hidden="true">→</div>
@@ -242,7 +242,7 @@ cd apps/web &amp;&amp; npm install &amp;&amp; npm run dev</code></pre>
         </p>
       </div>
       <div class="devlog-grid">
-        <div><span>阶段 1</span><strong>M0 门禁</strong><p>SRT 解析、幂等导入、cue/passage 对齐；公开轨不可用如实记录并保留 SRT 回退。</p></div>
+        <div><span>阶段 1</span><strong>M0 门禁</strong><p>SRT 解析、幂等导入、cue/passage 对齐；匿名轨不可用如实记录并保留 SRT 回退。</p></div>
         <div><span>阶段 2</span><strong>检索与工作台</strong><p>ik 全文、关键词覆盖、检查器与时间戳跳转；修复大小写导致的词项漏匹配。</p></div>
         <div><span>阶段 3</span><strong>向量与评测</strong><p>接入 bge-small-zh-v1.5、RRF k=60、无答案阈值；20 条标注集真实评测。</p></div>
         <div><span>阶段 4</span><strong>复习清单</strong><p>相关度优先贪心、区间并集计时；修掉跨课程稀释与重复计时两个真实缺陷。</p></div>
@@ -263,7 +263,7 @@ cd apps/web &amp;&amp; npm install &amp;&amp; npm run dev</code></pre>
         <h2>没有做的，也写清楚。</h2>
       </div>
       <div class="limits-grid">
-        <div><strong>B 站公开轨</strong><p>当前网络环境下公开字幕轨探测不可用，导入路径会返回分类结果而不是崩溃；支持浏览器导出 SRT 后上传。未使用伪造字幕冒充公开轨。</p></div>
+        <div><strong>B 站字幕轨</strong><p>匿名公开轨在本机网络不可用；配置本机登录态后可读取 AI 字幕轨，并在入库前按时长校验覆盖率，防止串台。未使用伪造字幕冒充公开轨；也保留浏览器导出 SRT 后上传的回退。</p></div>
         <div><strong>语料规模</strong><p>样例语料为 2 门课、5 讲、187 条字幕，用于完整验证链路，不代表大规模课程库性能。评测延迟是单机 Docker 实测值。</p></div>
         <div><strong>真实使用数据</strong><p>尚无真实用户使用统计，因此站点不展示使用人数或提效比例；上线后的站点访问统计可在 Qoder Sites 后台查看。</p></div>
         <div><strong>ASR / LLM 摘要</strong><p>未实现，能力矩阵中明确标注“不可用”，不以占位功能冒充完成。</p></div>

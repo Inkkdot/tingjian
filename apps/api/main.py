@@ -13,7 +13,12 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from bilibili import BilibiliClient, classify_failure, parse_bilibili_url
+from bilibili import (
+    BilibiliClient,
+    classify_failure,
+    parse_bilibili_url,
+    validate_track,
+)
 from config import settings
 from domain import AppError, BadSubtitle, ImportFailed, RawCue
 from embeddings import MODEL_LABEL, Embedder
@@ -209,6 +214,7 @@ def health() -> dict[str, Any]:
             "vector_search": bool(vector_ready),
             "hybrid_search": bool(ok and vector_ready),
             "bilibili_import": bool(ok and meta.get("bilibili_import_ok") == "1"),
+            "bilibili_login": settings.bilibili_login_configured,
             "bilibili_browser_fallback": True,
             "review_playlist": True,
             "asr": False,
@@ -258,7 +264,7 @@ def import_bilibili(payload: BilibiliImport) -> dict[str, Any]:
     cid, cname = _course(payload.course_id, payload.course_name, payload.term)
     warnings: list[str] = []
     try:
-        with BilibiliClient() as client:
+        with BilibiliClient(cookie=settings.bilibili_cookie) as client:
             video = client.fetch_video(parsed["bvid"])
             part_index = payload.part_index or parsed["part_index"]
             part = next((p for p in video.parts if p.page == part_index), None)
@@ -268,16 +274,23 @@ def import_bilibili(payload: BilibiliImport) -> dict[str, Any]:
                 )
             tracks = client.fetch_subtitles(video.bvid, part.cid)
             if not tracks:
+                hint = (
+                    "该视频没有可用字幕轨（登录态已生效）。请用「视频字幕提取器 Pro」"
+                    "在浏览器导出 SRT 后上传。"
+                    if client.authenticated
+                    else "未发现字幕轨。配置本机 BILIBILI_COOKIE 可读取登录态字幕，"
+                    "或用「视频字幕提取器 Pro」导出 SRT 后上传。"
+                )
                 raise ImportFailed(
                     "TRACK_NOT_AVAILABLE",
-                    "未发现无需登录即可读取的公开字幕轨。请用「视频字幕提取器 Pro」"
-                    "在浏览器导出 SRT 后，在导入页上传（服务端不会接触 Cookie）。",
+                    hint,
                     422,
                     {
                         "bvid": video.bvid,
                         "cid": part.cid,
                         "part_index": part_index,
-                        "path": "public_track_checked",
+                        "path": "track_checked",
+                        "authenticated": client.authenticated,
                         "hint": "browser_srt_fallback",
                         "title": video.title,
                         "part_title": part.title,
@@ -285,6 +298,7 @@ def import_bilibili(payload: BilibiliImport) -> dict[str, Any]:
                 )
             track = next((t for t in tracks if t.lan.startswith("zh")), tracks[0])
             cues = client.fetch_cues(track)
+            track_report = validate_track(cues, part.duration_ms or video.duration_ms)
     except AppError:
         raise
     except Exception as exc:
@@ -298,7 +312,7 @@ def import_bilibili(payload: BilibiliImport) -> dict[str, Any]:
         term=payload.term,
         title=part.title or video.title,
         source_url=f"https://www.bilibili.com/video/{video.bvid}?p={part_index}",
-        source_type="bilibili_public_track",
+        source_type="bilibili_track",
         platform="bilibili",
         platform_video_id=video.bvid,
         part_index=part_index,
@@ -314,8 +328,9 @@ def import_bilibili(payload: BilibiliImport) -> dict[str, Any]:
         "title": video.title,
         "part_title": part.title,
         "owner": video.owner,
-        "path": "public_track",
+        "path": "login_track" if client.authenticated else "public_track",
         "track": track.lan_doc,
+        "coverage": track_report,
     }
     return result
 
@@ -324,7 +339,7 @@ def import_bilibili(payload: BilibiliImport) -> dict[str, Any]:
 def bilibili_preview(url: str) -> dict[str, Any]:
     parsed = parse_bilibili_url(url)
     try:
-        with BilibiliClient() as client:
+        with BilibiliClient(cookie=settings.bilibili_cookie) as client:
             video = client.fetch_video(parsed["bvid"])
             part = next(
                 (p for p in video.parts if p.page == parsed["part_index"]), video.parts[0]
@@ -344,11 +359,16 @@ def bilibili_preview(url: str) -> dict[str, Any]:
         "part_title": part.title,
         "cid": part.cid,
         "subtitle_tracks": [t.__dict__ for t in tracks],
-        "public_track_available": bool(tracks),
+        "track_available": bool(tracks),
+        "authenticated": client.authenticated,
         "fallback_hint": (
             None
             if tracks
-            else "未发现公开字幕轨，请用「视频字幕提取器 Pro」导出 SRT 后在导入页上传。"
+            else (
+                "该视频没有可用字幕轨（登录态已生效），请导出 SRT 后上传。"
+                if client.authenticated
+                else "未发现字幕轨。配置本机 BILIBILI_COOKIE 可读取登录态字幕，或导出 SRT 后上传。"
+            )
         ),
     }
 

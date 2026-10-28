@@ -79,6 +79,7 @@ export interface Capabilities {
   vector_search: boolean;
   hybrid_search: boolean;
   bilibili_import: boolean;
+  bilibili_login: boolean;
   bilibili_browser_fallback: boolean;
   review_playlist: boolean;
   asr: boolean;
