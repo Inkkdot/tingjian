@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
-import { ExternalLink, Loader2 } from "lucide-react";
-import { api, errorText, fmtTime } from "../lib/api";
-import { demoCues } from "../lib/demo";
-import type { Course, Cue, Fixture, Video } from "../lib/types";
+import { fmtTime } from "../lib/api";
+import type { Course, Video } from "../lib/types";
 
 interface LibraryPageProps {
-  demo: boolean;
   courses: Course[];
   videos: Video[];
-  fixture: Fixture | null;
   libCourseId: string;
   onLibCourseId: (courseId: string) => void;
+  onOpenVideo: (video: Video) => void;
 }
 
 const COVER_PALETTES: Array<[string, string]> = [
@@ -69,41 +65,8 @@ function Cover(props: {
 }
 
 export default function LibraryPage({
-  demo, courses, videos, fixture, libCourseId, onLibCourseId,
+  courses, videos, libCourseId, onLibCourseId, onOpenVideo,
 }: LibraryPageProps) {
-  const [selected, setSelected] = useState<Video | null>(null);
-  const [cues, setCues] = useState<Cue[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!selected) {
-      setCues([]);
-      return;
-    }
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    const run = async () => {
-      try {
-        if (demo) {
-          if (fixture) setCues(demoCues(fixture, selected.id));
-        } else {
-          const result = await api.cues(selected.id);
-          if (!cancelled) setCues(result.cues);
-        }
-      } catch (exc) {
-        if (!cancelled) setError(errorText(exc));
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-    void run();
-    return () => {
-      cancelled = true;
-    };
-  }, [selected, demo, fixture]);
-
   const shown = libCourseId
     ? videos.filter((video) => video.course_id === libCourseId)
     : videos;
@@ -181,8 +144,8 @@ export default function LibraryPage({
               <button
                 key={video.id}
                 className="lecture-card"
-                onClick={() => setSelected(selected?.id === video.id ? null : video)}
-                title={video.title}
+                onClick={() => onOpenVideo(video)}
+                title={`${video.title} · 点击进入搜索页播放`}
               >
                 <Cover
                   seed={video.id}
@@ -204,46 +167,6 @@ export default function LibraryPage({
         <div className="empty">
           <strong>还没有讲次</strong>
           <span className="small">导入后这里会出现封面卡。</span>
-        </div>
-      )}
-
-      {selected && (
-        <div className="card" style={{ marginTop: 20 }}>
-          <div className="inspector-head">
-            <div>
-              <div className="section-title" style={{ margin: 0 }}>{selected.title}</div>
-              <div className="page-sub">
-                {selected.cue_count} 句 · {selected.passage_count} 片段 · 时长 {fmtTime(selected.duration_ms)}
-                {selected.source_url && (
-                  <a href={selected.source_url} target="_blank" rel="noreferrer" style={{ marginLeft: 8 }}>
-                    <ExternalLink size={12} style={{ verticalAlign: -1 }} /> 原视频
-                  </a>
-                )}
-              </div>
-            </div>
-            <button className="btn ghost sm" onClick={() => setSelected(null)}>关闭</button>
-          </div>
-          <dl className="kv" style={{ marginBottom: 12 }}>
-            <dt>视频 ID</dt><dd className="mono">{selected.id}</dd>
-            <dt>来源类型</dt><dd>{selected.source_type}</dd>
-            <dt>平台</dt><dd>{selected.platform} {selected.platform_video_id}</dd>
-            <dt>时间偏移</dt><dd>{selected.offset_ms} ms</dd>
-            <dt>来源 URL</dt><dd>{selected.source_url || "（本地字幕，无源视频）"}</dd>
-          </dl>
-          {loading && <div className="small muted"><Loader2 className="spin" size={14} /> 加载字幕…</div>}
-          {error && <div className="notice error">{error}</div>}
-          {!loading && !error && (
-            <div className="transcript" style={{ maxHeight: 320 }}>
-              {cues.slice(0, 80).map((cue) => (
-                <div className="cue-row" key={cue.seq} style={{ cursor: "default" }}>
-                  <span className="cue-time">{fmtTime(cue.start_ms)}</span>
-                  <span>{cue.text}</span>
-                </div>
-              ))}
-              {cues.length > 80 && <div className="small muted" style={{ padding: 8 }}>仅显示前 80 句，共 {cues.length} 句。</div>}
-              {cues.length === 0 && <div className="small muted" style={{ padding: 8 }}>没有字幕。</div>}
-            </div>
-          )}
         </div>
       )}
     </div>

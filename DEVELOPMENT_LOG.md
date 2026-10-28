@@ -295,6 +295,8 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 - `pages/ImportPage.tsx`：移除 demo 模式下对表单的全局禁用；数值输入与文件选择在 demo 可用；
   demo 的 SRT 导入走浏览器解析与临时索引，明确标注「不写入 seekdb、刷新后清空」；
   B 站 tab 在 demo 下禁用直连并给出准确原因；新增分 P 输入并在预览后回填。
+- `pages/LibraryPage.tsx`、`App.tsx`：库页讲次卡片不再展开内嵌详情，改为跳转搜索页并直接
+  打开右侧播放检查器（`activeVideo` 全局状态 + 搜索页签），左栏保持搜索界面。
 - `components/AppShell.tsx`、`pages/SettingsPage.tsx`：把「Live 导出的 seekdb 快照」改为「离线字幕快照」，
   明确 Demo 不连接 seekdb；评测语料（自建 5 讲标注集）与 Demo 快照分开标注。
 - 落地页 `dist/index.html`：删除 B+ 树/虚拟内存旧截图与 12 片段等占位数据；换成当前 B 站 demo 截图、
@@ -306,6 +308,8 @@ Cookie 不落盘、不进仓库、不发往除 `*.bilibili.com` 以外的任何�
 - `python -m pytest tests/unit`：23 通过；`tests/integration`：2 通过；`npm run build` 与 `build:demo` 通过。
 - Demo 搜索：点推荐词「操作系统」→ 10 条命中 → 点击首条 → 内嵌播放器定位 0:01，检查器 578 句字幕。
 - 拖拽：分隔条左拖 300px，检查器 380 → 680px，播放器与字幕同步变宽，localStorage 写入 680；1024 宽自动单列。
+- 库页入口：点击「操作系统简介」讲次卡片 → 自动切到「搜索」页签，左栏为搜索界面，
+  右侧播放检查器加载该讲 B 站播放器与 578 句字幕。
 - Demo 导入：B 站 tab 的偏移/分 P 输入可编辑；SRT 上传 3 句 → 3 条字幕 / 1 个片段，加入临时索引，
   搜索「冒烟测试」命中新讲次；结果卡片明确「未写入 seekdb，刷新后清空」。
 - Live 导入：`localhost:5173` 连 `127.0.0.1:8001` 的真实 seekdb，上传同款 SRT →

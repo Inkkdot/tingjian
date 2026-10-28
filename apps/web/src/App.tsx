@@ -118,6 +118,14 @@ export default function App() {
     setTabs((open) => (open.includes("search") ? open : [...open, "search"]));
   }, []);
 
+  const openVideo = useCallback(
+    (video: Video) => {
+      setActiveVideo(video);
+      navigate("search");
+    },
+    [navigate],
+  );
+
   const head = PAGE_TITLES[page];
 
   return (
@@ -184,12 +192,11 @@ export default function App() {
       )}
       {page === "library" && (
         <LibraryPage
-          demo={demo}
           courses={courses}
           videos={videos}
-          fixture={fixture}
           libCourseId={libCourseId}
           onLibCourseId={setLibCourseId}
+          onOpenVideo={openVideo}
         />
       )}
       {page === "review" && <ReviewPage demo={demo} />}
